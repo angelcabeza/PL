@@ -8,30 +8,32 @@
     #define ENDBLO 261
     #define INIPA 262
     #define ENDPA 263
-    #define CONSTINT 264
-    #define CONSTANT 265
-    #define WORD 266
-    #define LIST 267
-    #define TYPEVAR 268
-    #define IF 269
-    #define ELSE 270
-    #define WHILE 271
-    #define READ 272
-    #define PRINT 273
-    #define RETURN 274
-    #define FOR 275
-    #define ITEFOR 276
-    #define DO 277
-    #define ASIGN 278
-    #define SEMICOLON 279
-    #define COMMA 280
-    #define SIGN 281
-    #define BINOP 282
-    #define UNOP 283
-    #define LISTOP1 284
-    #define LISTOP2 285
-    #define DOUBMIN 286
-    #define ID 287
+    #define INISQR 264
+    #define ENDSQR 265
+    #define CONSTINT 266
+    #define CONSTANT 267
+    #define WORD 268
+    #define LIST 269
+    #define TYPEVAR 270
+    #define IF 271
+    #define ELSE 272
+    #define WHILE 273
+    #define READ 274
+    #define PRINT 275
+    #define RETURN 276
+    #define FOR 277
+    #define ITEFOR 278
+    #define DO 279
+    #define ASIGN 280
+    #define SEMICOLON 281
+    #define COMMA 282
+    #define SIGN 283
+    #define BINOP 284
+    #define UNOP 284
+    #define LISTOP1 285
+    #define LISTOP2 286
+    #define DOUBMIN 287
+    #define ID 288
 %}
 
 %option yylineno
@@ -51,6 +53,8 @@ word {leter}+
 "}" return ENDBLO;
 "(" return INIPA;
 ")" return ENDPA;
+"[" return INISQR;
+"]" return ENDSQR;
 {constint} return CONSTINT;
 {const_double} return CONSTANT;
 "true" return CONSTANT;

@@ -41,9 +41,10 @@
 
 digit [0-9]
 constint {digit}+
-const_double {digit}.{digit}
+const_double {constint}.{constint}
 leter [a-zA-Z]
-word {leter}+
+word "{leter}+"
+id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 
 %%
 "main" return MAIN;
@@ -103,12 +104,12 @@ word {leter}+
 "<<" return LISTOP1;
 "$" return LISTOP2;
 "--" return DOUBMIN;
+{word} return WORD;
+{id} return ID;
 [\n\r\t ] ECHO;
 {leter} return CONSTANT;
-{word} return WORD;
-. {
-    printf("La palabra %s en la linea %d no es un identificador válido",yytext,yylineno);
-}
+. printf("\n La palabra %s en la linea %d no es un identificador valido \n",yytext,yylineno);
+
 
 
 %%

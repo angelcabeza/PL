@@ -3,7 +3,7 @@ int main()
 	int a ;
 	int b ;
 
-	a = 4 ;
+	1a = 4 ;
 
 	b = 3 ;
 
@@ -11,7 +11,7 @@ int main()
 
 	list of int lista = ;
 
-	for i = 0 down to 20 do{
+	fa.r i = 0 down to 20 do{
 
 	}
 

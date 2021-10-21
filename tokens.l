@@ -108,7 +108,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 {id} return ID;
 [\n\r\t ] ECHO;
 {leter} return CONSTANT;
-. printf("\n La palabra %s en la linea %d no es un identificador valido \n",yytext,yylineno);
+. printf("\n\n \tERROR LEXICO: la palabra %s en la linea %d \n\n\t",yytext,yylineno);
 
 
 

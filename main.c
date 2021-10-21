@@ -1,23 +1,17 @@
 int main()
 {
 	int a ;
-	int b ;
+	i·nt b ;
 
-	1a = 4 ;
+	a = 4 ;
 
 	b = 3 ;
 
 	c = a + b;
 
-	'a'
+	li·st of int lista = [7];
 
-	a
-
-	"hello world"
-
-	list of int lista = ;
-
-	fa.r i = 0 down to 20 do{
+	for i = 0 down to 20 do{
 
 	}
 

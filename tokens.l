@@ -29,11 +29,13 @@
     #define COMMA 282
     #define SIGN 283
     #define BINOP 284
-    #define UNOP 284
-    #define LISTOP1 285
-    #define LISTOP2 286
-    #define DOUBMIN 287
-    #define ID 288
+    #define UNOP 285
+    #define LISTOP1 286
+    #define LISTOP2 287
+    #define DOUBMIN 288
+    #define ID 289
+    #define PLUSPLUS 290
+    #define ATSIGN 291
 %}
 
 %option yylineno
@@ -90,20 +92,20 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 ">" return BINOP; 
 "&&" return BINOP; 
 "||" return BINOP; 
-"@" return BINOP; 
 "%" return BINOP; 
 "**" return BINOP; 
 "^" return BINOP; 
 "&" return UNOP; 
 "~" return UNOP; 
 "!" return UNOP; 
-"++" return UNOP; 
 "#" return UNOP; 
 "?" return UNOP; 
 ">>" return LISTOP1;
 "<<" return LISTOP1;
 "$" return LISTOP2;
 "--" return DOUBMIN;
+"++" return PLUSPLUS; 
+"@" return ATSIGN; 
 {word} return WORD;
 {id} return ID;
 [\n\r\t ] ECHO;

@@ -10,40 +10,61 @@
 
 %error-verbose
 
-%token MAIN INIBLO ENDBLO INIVAR ENDVAR TYPEVAR SEMICOLON COMMA LIST VACIO ID INIPA ENDPA ASIGN IF ELSE WHILE FOR ITEFOR CONST_INT DO READ PRINT RETURN LISTOP1 LISTOP2 WORD BINOP UNOP PLUSPLUS CONSTANT
+%left ORLOG
+%left ANDLOG
+%left EXOR
+%left EQUALS
+%left COMPAR 
+%left ADDITION
+%left MULTI
+%right UNARI
+%right MINMIN
+%right PLUSPLUS
+%left INISQR ENDSQR
+%token MAIN INIBLO ENDBLO INIVAR ENDVAR TYPEVAR SEMICOLON COMMA  ID INIPA ENDPA LIST IF ELSE FOR WHILE ASIGN CONST_INT ITEFOR DO READ PRINT RETURN LISTOP1 LISTOP2 ATSIGN CONSTANT WORD
 %start S
 
 %%
 S   : MAIN B
 ;
+
 B   : INIBLO Dvl Dss Ses ENDBLO
 ;
+
 Dvl : INIVAR Vl ENDVAR 
-    | VACIO
+    | /* empty */
 ;
+
 Vl  : Vl Cdv 
     | Cdv
 ;
+
 Cdv : TYPEVAR Lv SEMICOLON 
     | El SEMICOLON
 ;
+
 Lv  : Lv COMMA ID 
     | ID
 ;
+
 El  : LIST TYPEVAR Lv
 ;
 
 Dss : Dss Ds 
-    | VACIO
+    | /* empty */
 ;
+
 Ds  : Cs B
 ;
+
 Cs  : Dc ID INIPA Pa ENDPA 
     | Dc ID INIPA ENDPA
 ;
+
 Dc  : LIST TYPEVAR 
     | TYPEVAR
 ;
+
 Pa  : Pa COMMA Dc ID 
     | Dc ID
 ;
@@ -51,6 +72,7 @@ Pa  : Pa COMMA Dc ID
 Ses : Ses Se 
     | Se
 ;
+
 Se  : B 
     | ID ASIGN Exp SEMICOLON 
     | IF Exp Ses 
@@ -63,18 +85,22 @@ Se  : B
     | Exp LISTOP1 
     | LISTOP2 Exp
 ;
+
 Exp : INIPA Exp ENDPA 
-    | UNOP Exp 
+    | UNARI Exp 
     | PLUSPLUS Exp 
-    | Exp BINOP Exp 
-    | Exp ASIGN Exp 
-    | ID PLUSPLUS ID ASIGN ID 
+    | MINMIN Exp 
+    | Exp Binop Exp 
+    | Exp ATSIGN Exp 
+    | ID PLUSPLUS ID ATSIGN ID 
+    | ID MINMIN ID ATSIGN ID 
     | ID 
     | CONSTANT 
     | ID INIPA Le ENDPA 
     | ID INIPA ENDPA
 ;
-Lec : Lec COMMA Exp 
+
+Lec :  Lec COMMA Exp 
     | Lec COMMA WORD 
     | Exp 
     | WORD
@@ -83,6 +109,15 @@ Lec : Lec COMMA Exp
 Le  : Le COMMA Exp 
     | Exp
 ;
+
+Binop   : ORLOG 
+        | ANDLOG 
+        | EXOR 
+        | EQUALS 
+        | COMPAR 
+        | MULTI
+;
+
 %%
 
 #include "lex.yy.c"

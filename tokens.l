@@ -27,15 +27,20 @@
     #define ASIGN 280
     #define SEMICOLON 281
     #define COMMA 282
-    #define SIGN 283
-    #define BINOP 284
-    #define UNOP 285
-    #define LISTOP1 286
-    #define LISTOP2 287
-    #define DOUBMIN 288
-    #define ID 289
-    #define PLUSPLUS 290
-    #define ATSIGN 291
+    #define ORLOG 283
+    #define ANDLOG 284
+    #define EXOR 285
+    #define EQUALS 286
+    #define COMPAR 287
+    #define ADDITION 288
+    #define MULTI 289
+    #define UNOP 290
+    #define LISTOP1 291
+    #define LISTOP2 292
+    #define ID 293
+    #define MINMIN 294
+    #define PLUSPLUS 295
+    #define ATSIGN 296
 %}
 
 %option yylineno
@@ -62,6 +67,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 {const_double} return CONSTANT;
 "true" return CONSTANT;
 "false" return CONSTANT;
+{leter} return CONSTANT;
 "list of" return LIST;
 "int" return TYPEVAR;
 "bool" return TYPEVAR;
@@ -80,36 +86,33 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 "=" return ASIGN;
 ";" return SEMICOLON;
 "," return COMMA;
-"+" return SIGN;
-"-" return SIGN;
-"*" return BINOP; 
-"/" return BINOP; 
-"==" return BINOP; 
-"!=" return BINOP; 
-"<=" return BINOP; 
-">=" return BINOP; 
-"<" return BINOP; 
-">" return BINOP; 
-"&&" return BINOP; 
-"||" return BINOP; 
-"%" return BINOP; 
-"**" return BINOP; 
-"^" return BINOP; 
-"&" return UNOP; 
-"~" return UNOP; 
-"!" return UNOP; 
-"#" return UNOP; 
-"?" return UNOP; 
+"||" return ORLOG;
+"&&" return ANDLOG;
+"^" return EXOR;
+"!=" return EQUALS; 
+"<=" return EQUALS; 
+"<" return COMPAR;
+">" return COMPAR;
+"<=" return COMPAR;
+">=" return COMPAR;
+"+" return ADDITION;
+"-" return ADDITION;
+"*" return MULTI;
+"/" return MULTI;
+"%" return MULTI;
+"~" return UNOP;
+"!" return UNOP;
+"#" return UNOP;
+"?" return UNOP;
 ">>" return LISTOP1;
 "<<" return LISTOP1;
 "$" return LISTOP2;
-"--" return DOUBMIN;
+"--" return MINMIN;
 "++" return PLUSPLUS; 
 "@" return ATSIGN; 
 {word} return WORD;
 {id} return ID;
 [\n\r\t ] ECHO;
-{leter} return CONSTANT;
 . printf("\n\n \tERROR LEXICO: la palabra %s en la linea %d \n\n\t",yytext,yylineno);
 
 

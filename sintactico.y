@@ -10,6 +10,37 @@
 
 %error-verbose
 
+
+
+%token MAIN 
+%token INIBLO 
+%token ENDBLO 
+%token INIVAR 
+%token ENDVAR 
+%token TYPEVAR 
+%token SEMICOLON 
+%token COMMA  
+%token ID 
+%token INIPA 
+%token ENDPA 
+%token LIST 
+%token IF 
+%token ELSE 
+%token FOR 
+%token WHILE 
+%token ASIGN 
+%token CONST_INT 
+%token ITEFOR 
+%token DO 
+%token READ 
+%token PRINT 
+%token RETURN 
+%token LISTOP1 
+%token LISTOP2 
+%token ATSIGN 
+%token CONSTANT 
+%token WORD
+
 %left ORLOG
 %left ANDLOG
 %left EXOR
@@ -21,7 +52,7 @@
 %right MINMIN
 %right PLUSPLUS
 %left INISQR ENDSQR
-%token MAIN INIBLO ENDBLO INIVAR ENDVAR TYPEVAR SEMICOLON COMMA  ID INIPA ENDPA LIST IF ELSE FOR WHILE ASIGN CONST_INT ITEFOR DO READ PRINT RETURN LISTOP1 LISTOP2 ATSIGN CONSTANT WORD
+
 %start S
 
 %%

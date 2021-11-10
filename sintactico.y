@@ -20,8 +20,7 @@
 %token TYPEVAR 
 %token SEMICOLON 
 %token COMMA  
-%token ID 
-%token INIPA 
+%nonassoc ID INIPA 
 %token ENDPA 
 %token LIST 
 %token IF 
@@ -36,20 +35,18 @@
 %token PRINT 
 %token RETURN 
 %token LISTOP1 
-%token LISTOP2 
-%token ATSIGN 
+%nonassoc ATSIGN 
 %token CONSTANT 
 %token WORD
+%token EQUALS
+%token INISQR 
+%token ENDSQR
 
-%left ORLOG
-%left ANDLOG
-%left EXOR
-%left EQUALS
-%left COMPAR 
+%left BINOP
 %left ADDITION
-%left MULTI
+
 %right UNARI
-%right MINMIN
+%right LISTOP2 MINMIN
 %right PLUSPLUS
 %left INISQR ENDSQR
 
@@ -63,7 +60,7 @@ B   : INIBLO Dvl Dss Ses ENDBLO
 ;
 
 Dvl : INIVAR Vl ENDVAR 
-    | /* empty */
+    |
 ;
 
 Vl  : Vl Cdv 
@@ -82,7 +79,7 @@ El  : LIST TYPEVAR Lv
 ;
 
 Dss : Dss Ds 
-    | /* empty */
+    |
 ;
 
 Ds  : Cs B
@@ -106,10 +103,10 @@ Ses : Ses Se
 
 Se  : B 
     | ID ASIGN Exp SEMICOLON 
-    | IF Exp Ses 
-    | IF Exp Ses ELSE Ses 
-    | WHILE Exp Ses 
-    | FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Ses 
+    | IF INIPA Exp ENDPA Se
+    | IF INIPA Exp ENDPA Se ELSE Se 
+    | WHILE INIPA Exp ENDPA Se
+    | FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Se
     | READ Lv SEMICOLON 
     | PRINT Lec SEMICOLON 
     | RETURN Exp SEMICOLON 
@@ -119,17 +116,20 @@ Se  : B
 
 Exp : INIPA Exp ENDPA 
     | UNARI Exp 
+    | ADDITION Exp 
     | PLUSPLUS Exp 
     | MINMIN Exp 
-    | Exp Binop Exp 
+    | Exp BINOP Exp
     | Exp ATSIGN Exp 
-    | ID PLUSPLUS ID ATSIGN ID 
-    | ID MINMIN ID ATSIGN ID 
+    | Exp PLUSPLUS Exp ATSIGN Exp 
+    | Exp MINMIN Exp
+    | ID INIPA Vle ENDPA %prec ID
     | ID 
     | CONSTANT 
-    | ID INIPA Le ENDPA 
-    | ID INIPA ENDPA
+    | CONST_INT
 ;
+
+
 
 Lec :  Lec COMMA Exp 
     | Lec COMMA WORD 
@@ -137,16 +137,12 @@ Lec :  Lec COMMA Exp
     | WORD
 ;
 
-Le  : Le COMMA Exp 
-    | Exp
+Vle : Le
+    |
 ;
 
-Binop   : ORLOG 
-        | ANDLOG 
-        | EXOR 
-        | EQUALS 
-        | COMPAR 
-        | MULTI
+Le  : Le COMMA Exp 
+    | Exp
 ;
 
 %%

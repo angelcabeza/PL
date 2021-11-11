@@ -37,8 +37,8 @@
 %token LISTOP1 
 %nonassoc ATSIGN 
 %token CONSTANT 
+%token CONSTANT_INT
 %token WORD
-%token EQUALS
 %token INISQR 
 %token ENDSQR
 
@@ -127,9 +127,16 @@ Exp : INIPA Exp ENDPA
     | ID 
     | CONSTANT 
     | CONST_INT
+    | INISQR lc ENDSQR
 ;
 
+Con : CONSTANT 
+    | CONSTANT_INT
+;
 
+lc  : lc COMMA Con 
+    | Con
+;
 
 Lec :  Lec COMMA Exp 
     | Lec COMMA WORD 
@@ -147,10 +154,14 @@ Le  : Le COMMA Exp
 
 %%
 
+#ifdef DOSWINDOWS /* Variable de entorno que indica la plataforma */
+#include "lexyy.c"
+#else
 #include "lex.yy.c"
-#include "error.y"
+#endif
 
-int main()
+
+void yyerror( char *msg )
 {
-    yyparse();
+fprintf(stderr,"[Linea %d]: %s\n", linea_actual, msg) ;
 }

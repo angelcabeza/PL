@@ -6,6 +6,8 @@
     void yyerror(char * msg);
 
     int linea_actual = 1
+
+    #define YYERROR_VERBOSE
 %}
 
 %error-verbose
@@ -163,5 +165,5 @@ Le  : Le COMMA Exp
 
 void yyerror( char *msg )
 {
-fprintf(stderr,"[Linea %d]: %s\n", linea_actual, msg) ;
+fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
 }

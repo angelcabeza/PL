@@ -44,16 +44,7 @@ int funcionA (int a1, float a2, char a3){
 		end_local_var
 		char funcionE (char e1, char e2)
 		{
-			read "introduzca dos caracteres: ", e1, e2 ;
-			if (e1==’a’){
-				return e1 ;
-			}
-			else if (e1==’b’){
-				return e2 ;
-			}
-			else{
-				return ’ ’;
-			}
+			
 		}
 		read "introduzca un valor entero: ", valor ;
 		if (d1>0.0){
@@ -69,15 +60,5 @@ int funcionA (int a1, float a2, char a3){
 		}
 		return d1 ;
 	}
-	pe= pe<-10 ; /* Inserta 10 en la pila ’pe’ */
-	pf= pf<-10.0 ; /* Inserta 10.0 en la pila ’pf’ */
-	pc= pc<-’#’ ; /* Inserta # en la pila ’pc’ */
-	if (?(pe<-20) == 20){ /* Inserta 20 y si el tope de la pila ’pe’ es 20 */
-		ve= pe-> ; /* Extrae el tope de la pila y lo guarda en ’ve’ */
-	}
-	else{
-		pe= pe * pe2 ; /* Multiplica pe y pe2 y lo almacena en pe */
-	}
-	pe= pe2 - pe <- 10 * (20/2000) ;
 	}
 }

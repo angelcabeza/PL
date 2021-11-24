@@ -3,8 +3,6 @@
     #include <stdlib.h>
     #include <y.tab.h>
 
-    using namespace std;
-
 %}
 
 digit [0-9]

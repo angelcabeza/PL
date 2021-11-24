@@ -3,7 +3,7 @@ prueba: main.o y.tab.o
 	gcc -o prueba $^
 
 y.tab.o: y.tab.c
-	g++ -g -c -o y.tab.o y.tab.c -lfl -I ./ 
+	gcc -c -o y.tab.o y.tab.c -lfl -I ./ 
 
 main.o: main.c 
 	gcc -c main.c

@@ -1,11 +1,11 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include <tabla.h>
-%}
+    #include <y.tab.h>
 
-%option yylineno
-%option noyywrap
+    using namespace std;
+
+%}
 
 digit [0-9]
 constint {digit}+
@@ -13,6 +13,9 @@ const_double {constint}.{constint}
 leter '[a-zA-Z]'
 word \"[^\"]*\"
 id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
+
+%option noyywrap
+%option yylineno
 
 %%
 "main" return MAIN;
@@ -24,7 +27,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 ")" return ENDPA;
 "[" return INISQR;
 "]" return ENDSQR;
-{constint} return CONSTINT;
+{constint} return CONST_INT;
 {const_double} return CONSTANT;
 "true" return CONSTANT;
 "false" return CONSTANT;
@@ -51,7 +54,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 "&&" return ANDLOG;
 "^" return EXOR;
 "!=" return EQUALS; 
-"<=" return EQUALS; 
+"==" return EQUALS; 
 "<" return COMPAR;
 ">" return COMPAR;
 "<=" return COMPAR;
@@ -61,10 +64,10 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 "*" return MULTI;
 "/" return MULTI;
 "%" return MULTI;
-"~" return UNOP;
-"!" return UNOP;
-"#" return UNOP;
-"?" return UNOP;
+"~" return UNARI;
+"!" return UNARI;
+"#" return UNARI;
+"?" return UNARI;
 ">>" return LISTOP1;
 "<<" return LISTOP1;
 "$" return LISTOP2;
@@ -76,8 +79,4 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 [\n\r\t ] ECHO;
 . printf("\n\n \tERROR LEXICO: la palabra %s en la linea %d \n\n\t",yytext,yylineno);
 
-
-
 %%
-
-/************************************************************/

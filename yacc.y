@@ -3,17 +3,22 @@
     #include <stdio.h>
     #include <string.h>
 
-    void yyerror(char * msg);
+    using namespace std;
 
-    int linea_actual = 1
+    void yyerror(const char * msg);
 
-    #define YYERROR_VERBOSE
+    int yylex();
+
 %}
 
 %error-verbose
 
-
-
+%token UNARI
+%token ADDITION
+%token LISTOP2 MINMIN
+%token PLUSPLUS
+%token BINOP
+%token ATSIGN 
 %token MAIN 
 %token INIBLO 
 %token ENDBLO 
@@ -22,7 +27,8 @@
 %token TYPEVAR 
 %token SEMICOLON 
 %token COMMA  
-%nonassoc ID INIPA 
+%nonassoc ID 
+%nonassoc INIPA 
 %token ENDPA 
 %token LIST 
 %token IF 
@@ -37,20 +43,29 @@
 %token PRINT 
 %token RETURN 
 %token LISTOP1 
-%nonassoc ATSIGN 
 %token CONSTANT 
 %token CONSTANT_INT
 %token WORD
 %token INISQR 
 %token ENDSQR
 
-%left BINOP
-%left ADDITION
+%left ORLOG
+%left ANDLOG
+%left EXOR
+%left EQUALS
+%left COMPAR
 
-%right UNARI
-%right LISTOP2 MINMIN
+%left BINOP
 %right PLUSPLUS
-%left INISQR ENDSQR
+%right UNARI
+%left ADDITION
+%left MULTI
+
+%right LISTOP2 MINMIN
+
+%left ATSIGN 
+%left INISQR 
+%left ENDSQR
 
 %start S
 
@@ -118,19 +133,31 @@ Se  : B
 
 Exp : INIPA Exp ENDPA 
     | UNARI Exp 
-    | ADDITION Exp 
+    | ADDITION Exp
     | PLUSPLUS Exp 
     | MINMIN Exp 
+    | Exp Bin_op Exp %prec BINOP
     | Exp BINOP Exp
-    | Exp ATSIGN Exp 
-    | Exp PLUSPLUS Exp ATSIGN Exp 
-    | Exp MINMIN Exp
-    | ID INIPA Vle ENDPA %prec ID
-    | ID 
-    | CONSTANT 
-    | CONST_INT
+    | ID PLUSPLUS CONST_INT ATSIGN CONST_INT
+    | ID INIPA Vle ENDPA
+    | ID
+    | Const
     | INISQR lc ENDSQR
 ;
+
+Bin_op  : ADDITION
+        | ATSIGN
+        | MINMIN
+        | COMPAR
+        | EQUALS
+        | ORLOG
+        | ANDLOG
+        | EXOR
+        | MULTI
+;
+
+Const   : CONSTANT
+        | CONST_INT
 
 Con : CONSTANT 
     | CONSTANT_INT
@@ -156,14 +183,9 @@ Le  : Le COMMA Exp
 
 %%
 
-#ifdef DOSWINDOWS /* Variable de entorno que indica la plataforma */
-#include "lexyy.c"
-#else
 #include "lex.yy.c"
-#endif
 
-
-void yyerror( char *msg )
+void yyerror(const char *msg )
 {
 fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
 }

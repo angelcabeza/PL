@@ -8,7 +8,7 @@
 digit [0-9]
 constint {digit}+
 const_double {constint}.{constint}
-leter '[a-zA-Z]'
+leter \'[a-zA-Z]*'
 word \"[^\"]*\"
 id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 

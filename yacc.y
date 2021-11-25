@@ -42,7 +42,6 @@
 %token RETURN 
 %token LISTOP1 
 %token CONSTANT 
-%token CONSTANT_INT
 %token WORD
 %token INISQR 
 %token ENDSQR
@@ -82,15 +81,14 @@ Vl  : Vl Cdv
     | Cdv
 ;
 
-Cdv : TYPEVAR Lv SEMICOLON 
-    | El SEMICOLON
+Cdv : TYPEVAR Lv SEMICOLON
+    | LIST TYPEVAR Lv SEMICOLON
+    | error
 ;
 
 Lv  : Lv COMMA ID 
     | ID
-;
-
-El  : LIST TYPEVAR Lv
+    | error
 ;
 
 Dss : Dss Ds 
@@ -102,6 +100,7 @@ Ds  : Cs B
 
 Cs  : Dc ID INIPA Pa ENDPA 
     | Dc ID INIPA ENDPA
+    | error
 ;
 
 Dc  : LIST TYPEVAR 
@@ -122,12 +121,15 @@ Se  : B
     | IF INIPA Exp ENDPA Se ELSE Se 
     | WHILE INIPA Exp ENDPA Se
     | FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Se
-    | READ Lv SEMICOLON 
+    | READ Lvread SEMICOLON 
     | PRINT Lec SEMICOLON 
     | RETURN Exp SEMICOLON 
     | Exp LISTOP1 
     | LISTOP2 Exp
 ;
+
+Lvread  : WORD COMMA Lv
+        |Lv
 
 Exp : INIPA Exp ENDPA 
     | UNARI Exp 
@@ -139,8 +141,9 @@ Exp : INIPA Exp ENDPA
     | ID PLUSPLUS CONST_INT ATSIGN CONST_INT
     | ID INIPA Vle ENDPA
     | ID
-    | Const
+    | Con
     | INISQR lc ENDSQR
+    | error
 ;
 
 Bin_op  : ADDITION
@@ -154,11 +157,8 @@ Bin_op  : ADDITION
         | MULTI
 ;
 
-Const   : CONSTANT
-        | CONST_INT
-
 Con : CONSTANT 
-    | CONSTANT_INT
+    | CONST_INT
 ;
 
 lc  : lc COMMA Con 

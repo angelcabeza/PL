@@ -138,7 +138,7 @@ Exp : INIPA Exp ENDPA
     | MINMIN Exp 
     | Exp Bin_op Exp %prec BINOP
     | Exp BINOP Exp
-    | ID PLUSPLUS CONST_INT ATSIGN CONST_INT
+    | ID PLUSPLUS Id_con ATSIGN Id_con
     | ID INIPA Vle ENDPA
     | ID
     | Con
@@ -159,6 +159,10 @@ Bin_op  : ADDITION
 
 Con : CONSTANT 
     | CONST_INT
+;
+
+Id_con  : ID
+        | Con
 ;
 
 lc  : lc COMMA Con 

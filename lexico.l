@@ -25,7 +25,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 ")" return ENDPA;
 "[" return INISQR;
 "]" return ENDSQR;
-{constint} return CONST_INT;
+{constint} return CONSTANT;
 {const_double} return CONSTANT;
 "true" return CONSTANT;
 "false" return CONSTANT;
@@ -59,6 +59,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 ">=" return COMPAR;
 "+" return ADDITION;
 "-" return ADDITION;
+"**" return CONCATENATE;
 "*" return MULTI;
 "/" return MULTI;
 "%" return MULTI;

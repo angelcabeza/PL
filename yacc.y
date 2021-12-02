@@ -15,7 +15,6 @@
 %token ADDITION
 %token LISTOP2 MINMIN
 %token PLUSPLUS
-%token BINOP
 %token ATSIGN 
 %token MAIN 
 %token INIBLO 
@@ -24,27 +23,26 @@
 %token ENDVAR 
 %token TYPEVAR 
 %token SEMICOLON 
-%token COMMA  
+%token COMMA
 %nonassoc ID 
-%nonassoc INIPA 
+%nonassoc INIPA   
 %token ENDPA 
 %token LIST 
 %token IF 
 %token ELSE 
 %token FOR 
 %token WHILE 
-%token ASIGN 
-%token CONST_INT 
+%token ASIGN
 %token ITEFOR 
 %token DO 
 %token READ 
 %token PRINT 
 %token RETURN 
-%token LISTOP1 
 %token CONSTANT 
 %token WORD
 %token INISQR 
 %token ENDSQR
+%left CONCATENATE
 
 %left ORLOG
 %left ANDLOG
@@ -52,15 +50,15 @@
 %left EQUALS
 %left COMPAR
 
-%left BINOP
-%right PLUSPLUS
-%right UNARI
 %left ADDITION
 %left MULTI
+%right PLUSPLUS 
+%left MINMIN
+%right UNARI
+%right LISTOP2
+%right LISTOP1 
+%right ATSIGN 
 
-%right LISTOP2 MINMIN
-
-%left ATSIGN 
 %left INISQR 
 %left ENDSQR
 
@@ -74,7 +72,7 @@ B   : INIBLO Dvl Dss Ses ENDBLO
 ;
 
 Dvl : INIVAR Vl ENDVAR 
-    |
+    | 
 ;
 
 Vl  : Vl Cdv 
@@ -83,7 +81,6 @@ Vl  : Vl Cdv
 
 Cdv : TYPEVAR Lv SEMICOLON
     | LIST TYPEVAR Lv SEMICOLON
-    | error
 ;
 
 Lv  : Lv COMMA ID 
@@ -120,7 +117,7 @@ Se  : B
     | IF INIPA Exp ENDPA Se
     | IF INIPA Exp ENDPA Se ELSE Se 
     | WHILE INIPA Exp ENDPA Se
-    | FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Se
+    | FOR ID ASIGN Exp ITEFOR Exp DO Se
     | READ Lvread SEMICOLON 
     | PRINT Lec SEMICOLON 
     | RETURN Exp SEMICOLON 
@@ -133,40 +130,28 @@ Lvread  : WORD COMMA Lv
 
 Exp : INIPA Exp ENDPA 
     | UNARI Exp 
-    | ADDITION Exp
-    | PLUSPLUS Exp 
-    | MINMIN Exp 
-    | Exp Bin_op Exp %prec BINOP
-    | Exp BINOP Exp
-    | ID PLUSPLUS Id_con ATSIGN Id_con
+    | ADDITION Exp %prec UNARI
+    | Exp ADDITION Exp
+    | Exp ATSIGN Exp %prec ADDITION
+    | Exp MINMIN Exp
+    | Exp COMPAR Exp
+    | Exp EQUALS Exp
+    | Exp ORLOG Exp
+    | Exp ANDLOG Exp
+    | Exp EXOR Exp
+    | Exp MULTI Exp
+    | Exp CONCATENATE Exp
+    | Exp PLUSPLUS Exp ATSIGN Exp
     | ID INIPA Vle ENDPA
     | ID
-    | Con
+    | CONSTANT
     | INISQR lc ENDSQR
     | error
 ;
 
-Bin_op  : ADDITION
-        | ATSIGN
-        | MINMIN
-        | COMPAR
-        | EQUALS
-        | ORLOG
-        | ANDLOG
-        | EXOR
-        | MULTI
-;
 
-Con : CONSTANT 
-    | CONST_INT
-;
-
-Id_con  : ID
-        | Con
-;
-
-lc  : lc COMMA Con 
-    | Con
+lc  : lc COMMA CONSTANT
+    | CONSTANT
 ;
 
 Lec :  Lec COMMA Exp 

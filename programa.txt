@@ -1,7 +1,7 @@
 main{
     begin_local_var
-        int ve hola, adios 
-        int jose angel, marios ;
+        int hola ve, hola, adios
+        int jose, angel marios ;
         double vf ;
         char vc ;
         bool vl ;
@@ -31,12 +31,12 @@ main{
                     }
                 }
                 xf= functionC (true, 10);
-                x2= xf*(funcionC(false,1)-funcionC(true,23))/10.0;
+                x2= xf*(funcionC(false,1) funcionC(true,23))/10.0;
                 while (x2*funcionC(false,1)-xf<10.0){
                     x2= x2*xf ;
                 }
             }
-            double funcionD (double d1){
+            double funcionD (dou d1){
                 begin_local_var
                     char dato ;
                     int valor ;
@@ -52,7 +52,7 @@ main{
                     }
                 }
                 read "introduzca un valor entero: ", valor ;
-                if (d1>0.0){
+                if (d1 ^ && 0.0){
                     begin_local_var
                         int dato ;
                     end_local_var

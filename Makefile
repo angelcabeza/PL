@@ -25,7 +25,7 @@ lex.yy.c: lexico.l
 #	yacc -d $^ -o $@
 
 clean:
-	-rm /*.o
+	-rm *.o
 	-rm y.tab.c
 	-rm lex.yy.c
 	-rm y.tab.h

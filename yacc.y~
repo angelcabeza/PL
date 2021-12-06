@@ -7,30 +7,9 @@
 
     int yylex();
 
-    #include "estructura_datos.h"
-    #define MAX_TS 500
-
-    unsigned long int TOPE = 0;
-    entradaTS TS [MAX_TS];
-    dtipo tipoTmp;
-    typedef struct {
-        int atrib = 0;
-        string lexema = "";
-        bool lista = false;
-        dtipo tipo = desconocido;
-        string codigo = "";
-    } atributos;
-
-    #define YYSTYPE atributos
-
-    int num_linea = 1;
-    void TS_insertaID (atributos atrib);
-    void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista);
-
-    string tipo_to_string(dtipo tipo);
 %}
 
-%define parse.error verbose
+%error-verbose
 
 %token UNARI
 %token ADDITION
@@ -104,8 +83,8 @@ Cdv : TYPEVAR Lv SEMICOLON
     | LIST TYPEVAR Lv SEMICOLON
 ;
 
-Lv  : Lv COMMA ID { TS_insertaID($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
-    | ID { TS_insertaID($1); $$.lexema = $1.lexema; }
+Lv  : Lv COMMA ID 
+    | ID
     | error
 ;
 
@@ -153,7 +132,7 @@ Exp : INIPA Exp ENDPA
     | UNARI Exp 
     | ADDITION Exp %prec UNARI
     | Exp ADDITION Exp
-    | Exp ATSIGN Exp
+    | Exp ATSIGN Exp %prec ADDITION
     | Exp MINMIN Exp
     | Exp COMPAR Exp
     | Exp EQUALS Exp
@@ -196,51 +175,4 @@ Le  : Le COMMA Exp
 void yyerror(const char *msg )
 {
 fprintf(stderr,"[Linea %d]: %s\n", yylineno, msg) ;
-}
-
-
-string tipo_to_string(dtipo tipo){
-    string res = "desconocido";
-
-	if ( tipo == real ) {
-		res = "real";
-	} else if (tipo == entero) {
-		res = "entero";
-	} else if ( tipo == booleano ) {
-		res = "booleano";
-	} else if ( tipo == caracter ) {
-		res = "caracter";
-	}
-
-	return res;
-}
-
-void TS_insertaID(atributos atributo){
-    printf("ID: %s\n\n", atributo.lexema.c_str());
-
-    entradaTS nueva_entrada;
-    nueva_entrada.entrada = variable;
-    nueva_entrada.nombre = atributo.lexema;
-    nueva_entrada.tipoDato = tipoTmp;
-
-    int pos_id_buscado = TOPE -1;
-    bool encontrado = false;
-
-    while (pos_id_buscado >= 0 && TS[pos_id_buscado].entrada != marca && !encontrado) {
-        if ( atributo.lexema == TS[pos_id_buscado].nombre ){
-            encontrado = true;
-        } else {
-            pos_id_buscado--;
-        }
-    }
-
-    if (!encontrado){
-        TS[TOPE] = nueva_entrada;
-    } else{
-        printf("Semantico linea %d: Redeclaración de '%s'\n", num_linea, atributo.lexema.c_str());
-    }
-}
-void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista){
-    if (hayreturn && (tipo != entero || eslista))
-        printf("Semantico: return recibe argumento tipo %s, se esperaba tipo entero", tipo_to_string(tipo));
 }

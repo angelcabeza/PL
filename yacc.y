@@ -42,22 +42,22 @@
 %token WORD
 %token INISQR 
 %token ENDSQR
-%left CONCATENATE
 
+%right ATSIGN 
+%right PLUSPLUS
+%left CONCATENATE
+%left MINMIN
 %left ORLOG
 %left ANDLOG
 %left EXOR
 %left EQUALS
 %left COMPAR
-
 %left ADDITION
 %left MULTI
-%right PLUSPLUS 
-%left MINMIN
+
 %right UNARI
 %right LISTOP2
 %right LISTOP1 
-%right ATSIGN 
 
 %left INISQR 
 %left ENDSQR
@@ -131,8 +131,8 @@ Lvread  : WORD COMMA Lv
 Exp : INIPA Exp ENDPA 
     | UNARI Exp 
     | ADDITION Exp %prec UNARI
-    | Exp ADDITION Exp
-    | Exp ATSIGN Exp %prec ADDITION
+    | Exp ADDITION Exp 
+    | Exp ATSIGN Exp
     | Exp MINMIN Exp
     | Exp COMPAR Exp
     | Exp EQUALS Exp
@@ -140,7 +140,7 @@ Exp : INIPA Exp ENDPA
     | Exp ANDLOG Exp
     | Exp EXOR Exp
     | Exp MULTI Exp
-    | Exp CONCATENATE Exp
+    | Exp CONCATENATE Exp    
     | Exp PLUSPLUS Exp ATSIGN Exp
     | ID INIPA Vle ENDPA
     | ID

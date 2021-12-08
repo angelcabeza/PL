@@ -1,7 +1,7 @@
 main{
     begin_local_var
-        int hola ve, hola, adios
-        int jose, angel marios ;
+        int angel, ve, hola, adios ;
+        int angel, angel, marios ;
         double vf ;
         char vc ;
         bool vl ;
@@ -31,39 +31,10 @@ main{
                     }
                 }
                 xf= functionC (true, 10);
-                x2= xf*(funcionC(false,1) funcionC(true,23))/10.0;
+                x2= xf*funcionC(true,23)/10.0;
                 while (x2*funcionC(false,1)-xf<10.0){
                     x2= x2*xf ;
                 }
-            }
-            double funcionD (dou d1){
-                begin_local_var
-                    char dato ;
-                    int valor ;
-                end_local_var
-                char funcionE (char e1, char e2){
-                    read "introduzca dos caracteres ", e1, e2 ;
-                    if (e1 == 'a'){
-                        return e1 ;
-                    }else if (e1=='b'){
-                        return e2 ;
-                    }else{
-                        return '';
-                    }
-                }
-                read "introduzca un valor entero: ", valor ;
-                if (d1 ^ && 0.0){
-                    begin_local_var
-                        int dato ;
-                    end_local_var
-                    dato= 2 ;
-                    dato= valor*20/dato ;
-                }
-                else {
-                    valor= valor * 100 ;
-                    d1= d1/1000.0 ;
-                }
-                return d1 ;
             }
             pe= pe ++ 10 @ 1 ;
         if ((pe ++ 20 @ 2) @ 2 == 20){

@@ -12,6 +12,9 @@
 
     unsigned long int TOPE = 0;
     entradaTS TS [MAX_TS];
+
+    entradaTS TS_paramf[MAX_TS];
+
     dtipo tipoTmp;
     typedef struct {
         int atrib = 0;
@@ -21,13 +24,17 @@
         string codigo = "";
     } atributos;
 
+    unsigned long TOPE_SUBPROG = 0;
+    atributos TS_llamadas_subprog[MAX_TS];
+    
     #define YYSTYPE atributos
 
-    int num_linea = 1;
     void TS_insertaID (atributos atrib);
     void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista);
+    void TS_insertaMarca();
 
     string tipo_to_string(dtipo tipo);
+    int incrementarTOPE();
 %}
 
 %define parse.error verbose
@@ -216,8 +223,6 @@ string tipo_to_string(dtipo tipo){
 }
 
 void TS_insertaID(atributos atributo){
-    printf("ID: %s\n\n", atributo.lexema.c_str());
-
     entradaTS nueva_entrada;
     nueva_entrada.entrada = variable;
     nueva_entrada.nombre = atributo.lexema;
@@ -236,11 +241,54 @@ void TS_insertaID(atributos atributo){
 
     if (!encontrado){
         TS[TOPE] = nueva_entrada;
+        incrementarTOPE();
     } else{
-        printf("Semantico linea %d: Redeclaración de '%s'\n", num_linea, atributo.lexema.c_str());
+        printf("Semantico linea %d: Redeclaración de '%s'\n", yylineno, atributo.lexema.c_str());
     }
 }
+
+int incrementarTOPE(){
+
+    int salida = 1;
+
+    if (TOPE == MAX_TS) {
+        printf("ERROR: Tope de la pila alcanzado.");
+
+        salida=0;
+    } else {
+        TOPE++;
+    }
+
+    return salida;
+}
+
 void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista){
     if (hayreturn && (tipo != entero || eslista))
         printf("Semantico: return recibe argumento tipo %s, se esperaba tipo entero", tipo_to_string(tipo));
+}
+
+void TS_insertaMarca() {
+    
+    entradaTS nueva_entrada;
+
+    nueva_entrada.entrada = marca;
+
+    nueva_entrada.nombre = "";
+    nueva_entrada.tipoDato = no_asignado;
+
+    TS[TOPE] = nueva_entrada;
+
+    incrementarTOPE();
+
+    if ( subprog != 0){
+
+        while (TOPE_PARAMF > 0) {
+            entradaTS entrada_tmp = TS_paramf[TOPE_PARAMF -1];
+            entrada_tmp.entrada = variable;
+            TS[TOPE] = entrada_tmp;
+
+            TOPE_PARAMF--;
+            incrementaTOPE();
+        }
+    }
 }

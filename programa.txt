@@ -1,7 +1,6 @@
 main{
     begin_local_var
         int angel, ve, hola, adios ;
-        int angel, angel, marios ;
         double vf ;
         char vc ;
         bool vl ;
@@ -40,9 +39,16 @@ main{
         if ((pe ++ 20 @ 2) @ 2 == 20){
             ve = pe -- 1 ;
         } else{
-            pe= pe * 2 ;
+            pe = pe * 2 ;
             pe = pe2 - 10;
-        } 
+        }
+    }
+    int funcionZ (int a){
+        begin_local_var
+            int a,b,c,d;
+        end_local_var
+            a = 1;
+            b = funcionA(a) ;
     }
     return 0;
 }

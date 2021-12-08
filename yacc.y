@@ -42,9 +42,11 @@
     void TS_vaciarEntradas();
     void TS_InsertaSubprog(atributos atributo);
     entradaTS encontrarEntrada(string nombre, bool debe_estar);
+    dtipo comprobar_llamada_a_funcion(atributos atrib);
 
     string tipo_to_string(dtipo tipo);
     int incrementarTOPE();
+    dtipo atrATipo(int atributo);
 %}
 
 %define parse.error verbose
@@ -180,7 +182,7 @@ Exp : INIPA Exp ENDPA
     | Exp MULTI Exp
     | Exp CONCATENATE Exp
     | Exp PLUSPLUS Exp ATSIGN Exp
-    | ID INIPA Vle ENDPA
+    | ID INIPA Vle ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; $$.codigo = ""; } ;
     | ID
     | CONSTANT
     | INISQR lc ENDSQR
@@ -369,4 +371,81 @@ dtipo atrATipo(int atributo){
     else if (atributo == 3){
         return caracter;
     }
+}
+
+dtipo comprobar_llamada_a_funcion(atributos atrib) {
+
+    dtipo tipo_funcion = desconocido;
+    entradaTS entrada_funcion = encontrarEntrada(atrib.lexema, true);
+    dtipo existe = entrada_funcion.tipoDato;
+
+    // si existe la entrada, y no es una funcion, sacamos un error de llamada
+    if ( existe != desconocido && entrada_funcion.entrada != funcion ){
+        printf("Error semantico en la linea %d: %s no es una funcion\n", yylineno, entrada_funcion.nombre.c_str());
+        
+
+    } else if ( existe != desconocido ) {
+
+        // buscamos la posicion donde comienzan los parametros formales
+        int pos_entrada = TOPE - 1;
+        while ( entrada_funcion.nombre != TS[pos_entrada].nombre || TS[pos_entrada].entrada != funcion ) {
+            pos_entrada--;
+        }
+
+        int pos_funcion = pos_entrada;
+
+        // Le damos la vuelta a la pila
+        pos_entrada += TS[pos_funcion].parametros;
+
+        // si el numero de parámetros de la definicion no coincide con el numero
+        // de parametros dados en la llamada
+        if (TS[pos_funcion].parametros != TOPE_SUBPROG){
+            printf("Error semantico en la linea %d: La funcion %s necesita %d parámetros y se han proporcionado %d\n", yylineno, entrada_funcion.nombre.c_str(), entrada_funcion.parametros, TOPE_SUBPROG);
+            
+        } else {
+
+            // pasamos al primer parámetro
+            int num_parametros = 0;
+
+            // para todos los parametros dados
+            while ( num_parametros < TOPE_SUBPROG ) {
+
+                entradaTS parametro_en_TS;
+
+                parametro_en_TS.tipoDato = TS_llamadas_subprog[num_parametros].tipo;
+
+                // Aqui he quitado el es_constante que se declara a falso y nunca jamas se vuelve a tocar
+                // if ( !TS_llamadas_subprog[num_parametros].es_constante ){
+                    // buscamos el parametro en la tabla de simbolos
+                    // diciendo que es necesario que lo encuentre
+                    parametro_en_TS = encontrarEntrada(TS_llamadas_subprog[num_parametros].lexema, true);
+                // }
+
+                // si el tipo encontrado no es del tipo esperado, sacamos el error
+                // por pantalla
+                if ( TS[pos_entrada].tipoDato != parametro_en_TS.tipoDato ){
+
+                    string tipo_esperado = tipo_to_string(TS[pos_entrada].tipoDato);
+                    string tipo_encontrado = tipo_to_string(parametro_en_TS.tipoDato);
+
+                    printf("Error semantico en la linea %d: El parámetro %d es de tipo %s pero se espera un tipo %s en la llamada a %s\n", yylineno , num_parametros + 1, tipo_encontrado.c_str(), tipo_esperado.c_str(), entrada_funcion.nombre.c_str());
+                    
+                }
+
+                // seguimos al siguiente parametro
+                num_parametros++;
+                pos_entrada--;
+            }
+
+            tipo_funcion = entrada_funcion.tipoDato;
+
+        }
+
+    }
+
+    // una vez comprobados todos, vaciamos la pila de parametros
+    TOPE_SUBPROG = 0;
+
+    return tipo_funcion;
+
 }

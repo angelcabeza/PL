@@ -41,6 +41,7 @@
     void TS_insertaMarca();
     void TS_vaciarEntradas();
     void TS_InsertaSubprog(atributos atributo);
+    void TS_InsertaParam(atributos atributo);
     entradaTS encontrarEntrada(string nombre, bool debe_estar);
     dtipo comprobar_llamada_a_funcion(atributos atrib);
 
@@ -144,8 +145,8 @@ Dc  : LIST TYPEVAR { tipoSubprog = atrATipo($2.atrib); listaTmp=true; }
     | TYPEVAR { tipoSubprog = atrATipo($1.atrib); listaTmp=false; }
 ;
 
-Pa  : Pa COMMA Dc ID 
-    | Dc ID
+Pa  : Pa COMMA Dc ID
+    | Dc ID { TS_InsertaParam($2); };
 ;
 
 Ses : Ses Se 
@@ -337,6 +338,44 @@ void TS_InsertaSubprog(atributos atributo){
         num_params;
         incrementarTOPE();
     }
+}
+
+void TS_InsertaParam(atributos atributo){
+
+    bool encontrado = false;
+
+    int n_params = TOPE_PARAMF - 1;
+
+    // buscamos si ya existe un parametro con ese nombre
+    while ( n_params > 0 && !encontrado ) {
+
+        encontrado = atributo.lexema == TS_paramf[n_params].nombre;
+
+        n_params--;
+    }
+
+    // si no existe lo añadimos
+    if ( !encontrado ) {
+
+        entradaTS nueva_entrada;
+
+        nueva_entrada.entrada = parametro_formal;
+
+        nueva_entrada.nombre = atributo.lexema;
+
+        nueva_entrada.parametros = 0;
+
+        nueva_entrada.tipoDato = tipoTmp;
+
+        TS_paramf[TOPE_PARAMF] = nueva_entrada;
+
+        TOPE_PARAMF++;
+
+    } else {
+        // si existe damos error
+        printf("Error semantico en la linea %d: El parámetro %s ya existe\n", yylineno, atributo.lexema.c_str());
+    }
+
 }
 
 entradaTS encontrarEntrada(string nombre, bool debe_estar){

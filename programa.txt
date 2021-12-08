@@ -29,8 +29,8 @@ main{
                         return x1 ;
                     }
                 }
-                xf= functionC (true, 10);
-                x2= xf*funcionC(true,23)/10.0;
+                xf = funcionC (10, 10);
+                x2 = xf*funcionC(true,23)/10.0;
                 while (x2*funcionC(false,1)-xf<10.0){
                     x2= x2*xf ;
                 }
@@ -42,13 +42,6 @@ main{
             pe = pe * 2 ;
             pe = pe2 - 10;
         }
-    }
-    int funcionZ (int a){
-        begin_local_var
-            int a,b,c,d;
-        end_local_var
-            a = 1;
-            b = funcionA(a) ;
     }
     return 0;
 }

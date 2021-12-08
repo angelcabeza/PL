@@ -142,7 +142,7 @@ Exp : INIPA Exp ENDPA
     | Exp MULTI Exp
     | Exp CONCATENATE Exp    
     | Exp PLUSPLUS Exp ATSIGN Exp
-    | ID INIPA Vle ENDPA
+    | ID INIPA Lec ENDPA
     | ID
     | CONSTANT
     | INISQR lc ENDSQR
@@ -158,15 +158,9 @@ Lec :  Lec COMMA Exp
     | Lec COMMA WORD 
     | Exp 
     | WORD
-;
-
-Vle : Le
     |
 ;
 
-Le  : Le COMMA Exp 
-    | Exp
-;
 
 %%
 

@@ -11,11 +11,15 @@
     #define MAX_TS 500
 
     unsigned long int TOPE = 0;
+    unsigned long int TOPE_PARAMF = 0;
+    int subprog = 0;
     entradaTS TS [MAX_TS];
 
     entradaTS TS_paramf[MAX_TS];
 
     dtipo tipoTmp;
+    dtipo tipoSubprog;
+
     typedef struct {
         int atrib = 0;
         string lexema = "";
@@ -23,6 +27,8 @@
         dtipo tipo = desconocido;
         string codigo = "";
     } atributos;
+
+    atributos atribvacio;
 
     unsigned long TOPE_SUBPROG = 0;
     atributos TS_llamadas_subprog[MAX_TS];
@@ -32,6 +38,9 @@
     void TS_insertaID (atributos atrib);
     void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista);
     void TS_insertaMarca();
+    void TS_vaciarEntradas();
+    void TS_InsertaSubprog(atributos atributo);
+    entradaTS encontrarEntrada(string nombre, bool debe_estar);
 
     string tipo_to_string(dtipo tipo);
     int incrementarTOPE();
@@ -96,10 +105,10 @@
 S   : MAIN B
 ;
 
-B   : INIBLO Dvl Dss Ses ENDBLO
+B   : INIBLO {TS_insertaMarca();} Dvl Dss Ses ENDBLO {TS_vaciarEntradas();}
 ;
 
-Dvl : INIVAR TS_InsertaMarca(); Vl ENDVAR 
+Dvl : INIVAR Vl ENDVAR 
     | 
 ;
 
@@ -123,8 +132,8 @@ Dss : Dss Ds
 Ds  : Cs B
 ;
 
-Cs  : Dc ID INIPA Pa ENDPA 
-    | Dc ID INIPA ENDPA
+Cs  : Dc ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
+    | Dc ID INIPA ENDPA {TS_InsertaSubprog(atribvacio);}
     | error
 ;
 
@@ -268,14 +277,11 @@ void comprobarExisteReturn(bool hayreturn, dtipo tipo, bool eslista){
 }
 
 void TS_insertaMarca() {
-    
     entradaTS nueva_entrada;
 
     nueva_entrada.entrada = marca;
 
     nueva_entrada.nombre = "";
-    nueva_entrada.tipoDato = no_asignado;
-
     TS[TOPE] = nueva_entrada;
 
     incrementarTOPE();
@@ -288,7 +294,61 @@ void TS_insertaMarca() {
             TS[TOPE] = entrada_tmp;
 
             TOPE_PARAMF--;
-            incrementaTOPE();
+            incrementarTOPE();
         }
     }
+}
+
+void TS_vaciarEntradas(){
+    while ( TS[TOPE -1 ].entrada != marca && TOPE > 0){
+        TOPE--;
+    }
+
+    TS[TOPE - 1].entrada = fin_bloque;
+}
+
+void TS_InsertaSubprog(atributos atributo){
+    entradaTS entrada = encontrarEntrada(atributo.lexema, false);
+    dtipo tipo_buscar = entrada.tipoDato;
+
+    if ( tipo_buscar == desconocido){
+        entradaTS nueva_entrada;
+
+        nueva_entrada.entrada = funcion;
+        nueva_entrada.nombre = atributo.lexema;
+        nueva_entrada.parametros = 0;
+        nueva_entrada.tipoDato = tipoSubprog;
+        TS[TOPE] = nueva_entrada;
+        incrementarTOPE();
+    } else {
+        printf("\nSemantico: Linea %d. Redifinicion de '%s'",yylineno,atributo.lexema.c_str());
+    }
+
+    int num_params = TOPE_PARAMF;
+    TS[TOPE -1].parametros = num_params;
+    while (num_params > 0){
+        TS[TOPE] = TS_paramf[num_params -1];
+
+        num_params;
+        incrementarTOPE();
+    }
+}
+
+entradaTS encontrarEntrada(string nombre, bool debe_estar){
+    int pos_actual = TOPE -1;
+    entradaTS entrada;
+
+    entrada.tipoDato = desconocido;
+
+    while ((TS[pos_actual].nombre != nombre || TS[pos_actual].entrada == parametro_formal) && pos_actual >= 0) {
+        pos_actual--;
+    }
+
+    if ( pos_actual != -1) {
+        entrada = TS[pos_actual];
+    } else if (debe_estar) {
+        printf("\nSemantico: linea %d. Identificador '%s' no declarado",yylineno, nombre.c_str());
+    }
+
+    return entrada;
 }

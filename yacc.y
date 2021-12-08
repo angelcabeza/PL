@@ -26,7 +26,7 @@
 
     unsigned long TOPE_SUBPROG = 0;
     atributos TS_llamadas_subprog[MAX_TS];
-    
+
     #define YYSTYPE atributos
 
     void TS_insertaID (atributos atrib);
@@ -99,7 +99,7 @@ S   : MAIN B
 B   : INIBLO Dvl Dss Ses ENDBLO
 ;
 
-Dvl : INIVAR Vl ENDVAR 
+Dvl : INIVAR TS_InsertaMarca(); Vl ENDVAR 
     | 
 ;
 

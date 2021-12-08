@@ -19,8 +19,7 @@ typedef enum {
 	caracter,
 	booleano,
 	vacio,
-    desconocido,
-    lista
+    desconocido
 } dtipo;
 
 typedef struct {
@@ -28,7 +27,7 @@ typedef struct {
     string nombre = "";
     dtipo tipoDato = desconocido;
     int parametros = 0;
-
+    bool eslista = false;
 } entradaTS;
 
 #endif

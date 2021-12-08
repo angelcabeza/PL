@@ -18,6 +18,7 @@
     entradaTS TS_paramf[MAX_TS];
 
     dtipo tipoTmp;
+    bool listaTmp;
     dtipo tipoSubprog;
 
     typedef struct {
@@ -116,8 +117,8 @@ Vl  : Vl Cdv
     | Cdv
 ;
 
-Cdv : TYPEVAR Lv SEMICOLON
-    | LIST TYPEVAR Lv SEMICOLON
+Cdv : TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
+    | LIST TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
 ;
 
 Lv  : Lv COMMA ID { TS_insertaID($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
@@ -137,8 +138,8 @@ Cs  : Dc ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
     | error
 ;
 
-Dc  : LIST TYPEVAR 
-    | TYPEVAR
+Dc  : LIST TYPEVAR { tipoSubprog = atrATipo($2.atrib); listaTmp=true; }
+    | TYPEVAR { tipoSubprog = atrATipo($1.atrib); listaTmp=false; }
 ;
 
 Pa  : Pa COMMA Dc ID 
@@ -236,6 +237,7 @@ void TS_insertaID(atributos atributo){
     nueva_entrada.entrada = variable;
     nueva_entrada.nombre = atributo.lexema;
     nueva_entrada.tipoDato = tipoTmp;
+    nueva_entrada.eslista = listaTmp;
 
     int pos_id_buscado = TOPE -1;
     bool encontrado = false;
@@ -318,6 +320,7 @@ void TS_InsertaSubprog(atributos atributo){
         nueva_entrada.nombre = atributo.lexema;
         nueva_entrada.parametros = 0;
         nueva_entrada.tipoDato = tipoSubprog;
+        nueva_entrada.eslista = listaTmp;
         TS[TOPE] = nueva_entrada;
         incrementarTOPE();
     } else {
@@ -351,4 +354,19 @@ entradaTS encontrarEntrada(string nombre, bool debe_estar){
     }
 
     return entrada;
+}
+
+dtipo atrATipo(int atributo){
+    if (atributo == 0){
+        return entero;
+    }
+    else if (atributo == 1){
+        return real;
+    }
+    else if (atributo == 2){
+        return booleano;
+    }
+    else if (atributo == 3){
+        return caracter;
+    }
 }

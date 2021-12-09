@@ -50,6 +50,7 @@
     void comprobarEsLista(atributos atrib);
     void comprobarAsignacionListas(atributos id, atributos exp);
     void comprobarDevuelveSubprog(atributos atrib);
+    string tipoDatoToString(dtipo tipo);
 
     dtipo comprobar_llamada_a_funcion(atributos atrib);
 
@@ -159,8 +160,8 @@ Cs  : Dc ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
     | error
 ;
 
-Dc  : LIST TYPEVAR { tipoSubprog = atrATipo($2.atrib); listaTmp=true; }
-    | TYPEVAR { tipoSubprog = atrATipo($1.atrib); listaTmp=false; }
+Dc  : LIST TYPEVAR { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
+    | TYPEVAR { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
 ;
 
 Pa  : Pa COMMA Dc ID { TS_InsertaParam($4); };
@@ -172,7 +173,7 @@ Ses : Ses Se
 ;
 
 Se  : B 
-    | ID ASIGN Exp SEMICOLON {  TS_insertaID($1); comprobarEsTipo($1.tipo, $3.tipo); comprobarAsignacionListas($1, $3); $$.lexema = $1.lexema;}
+    | ID ASIGN Exp SEMICOLON { comprobarEsTipo($1.tipo, $3.tipo); comprobarAsignacionListas($1, $3); $$.lexema = $1.lexema;}
     | IF INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
     | IF INIPA Exp ENDPA Se ELSE Se {comprobarEsTipo(booleano, $3.tipo);}
     | WHILE INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
@@ -200,7 +201,7 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp EXOR Exp
     | Exp MULTI Exp
     | Exp CONCATENATE Exp
-    | Exp PLUSPLUS Exp ATSIGN Exp
+    | Exp PLUSPLUS CONSTANT ATSIGN Exp
     | ID INIPA Lec ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; } ;
     | ID {entradaTS ent = encontrarEntrada($1.lexema, true); $$.tipo = ent.tipoDato; $$.lista = ent.eslista; $$.lexema = $1.lexema;}
     | CONSTANT {tipoTmp = $1.tipo; $$.tipo = $1.tipo; $$.lista = false; $$.lexema = $1.lexema;}
@@ -252,8 +253,6 @@ void TS_insertaID(atributos atributo){
     nueva_entrada.nombre = atributo.lexema;
     nueva_entrada.tipoDato = tipoTmp;
     nueva_entrada.eslista = listaTmp;
-
-    printf("%s\n",atributo.lexema);
 
     int pos_id_buscado = TOPE -1;
     bool encontrado = false;
@@ -335,7 +334,7 @@ void TS_InsertaSubprog(atributos atributo){
         nueva_entrada.entrada = funcion;
         nueva_entrada.nombre = atributo.lexema;
         nueva_entrada.parametros = 0;
-        nueva_entrada.tipoDato = tipoSubprog;
+        nueva_entrada.tipoDato = tipoTmp;
         nueva_entrada.eslista = listaTmp;
         TS[TOPE] = nueva_entrada;
         incrementarTOPE();
@@ -386,6 +385,8 @@ void TS_InsertaParam(atributos atributo){
 
         TOPE_PARAMF++;
 
+        printf("Tipo: '%s'",tipoDatoToString(nueva_entrada.tipoDato).c_str());
+
     } else {
         // si existe damos error
         printf("Error semantico en la linea %d: El parámetro %s ya existe\n", yylineno, atributo.lexema.c_str());
@@ -426,18 +427,21 @@ entradaTS encontrarEntrada(string nombre, bool debe_estar){
 }
 
 dtipo atrATipo(int atributo){
+    dtipo tipo = desconocido;
     if (atributo == 0){
-        return entero;
+        tipo = entero;
     }
     else if (atributo == 1){
-        return real;
+        tipo = real;
     }
     else if (atributo == 2){
-        return booleano;
+        tipo = booleano;
     }
     else if (atributo == 3){
-        return caracter;
+        tipo = caracter;
     }
+
+    return tipo;
 }
 
 // comprobamos si un lexema es de una función o no
@@ -723,4 +727,22 @@ dtipo comprobarOpUnarios( atributos exp ){
 
     return tipo_a_devolver;
 
+}
+
+string tipoDatoToString(dtipo tipo){
+    string datoString = "desconocido";
+
+    if (entero == tipo){
+        datoString = "entero";
+    } else if (real == tipo){
+        datoString = "real";
+    } else if (caracter == tipo){
+        datoString = "caracter";
+    } else if (vacio == tipo){
+        datoString = "vacio";
+    } else if (booleano == tipo){
+        datoString = "booleano";
+    }
+
+    return datoString;
 }

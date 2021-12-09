@@ -62,6 +62,7 @@
     dtipo comprobarOpBinarioMenos(atributos izq, atributos der);
     dtipo comprobarEsEnteroReal (atributos atrib);
     dtipo comprobarOpUnarios( atributos atrib );
+    void comprobarAdicion (atributos atr1, atributos atr2);
 
     string tipo_to_string(dtipo tipo);
     int incrementarTOPE();
@@ -191,8 +192,8 @@ Lvread  : WORD COMMA Lv
 Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " + $2.lexema + " )";}
     | UNARI Exp 
     | ADDITION Exp %prec UNARI
-    | Exp ADDITION Exp
-    | Exp ATSIGN Exp
+    | Exp ADDITION Exp { comprobarAdicion($1,$3); $$.tipo=$1.tipo, $$.lista=$1.lista; }
+    | Exp ATSIGN Exp { comprobarAtsign($1,$3); $$.tipo=$1.tipo, $$.lista=0; }
     | Exp MINMIN Exp
     | Exp COMPAR Exp
     | Exp EQUALS Exp
@@ -555,8 +556,6 @@ dtipo comprobar_llamada_a_funcion(atributos atrib) {
 }
 
 void comprobarEsTipo(dtipo tipo, dtipo tipo2){
-
-
     if (tipo != tipo2) {
 
         printf("Error semantico en la linea %d: Esperado tipo %s, encontrado tipo %s\n", yylineno, tipo_to_string(tipo).c_str(), tipo_to_string(tipo2).c_str());
@@ -706,6 +705,42 @@ dtipo comprobarEsEnteroReal (atributos atrib){
     }
     return atrib.tipo;
 }
+
+void comprobarAdicion (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+         (atr1.tipo != entero && atr2.tipo != real ) || (atr1.lista != atr2.lista) ) {
+
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);;
+        string tipo_atr2 = tipoDatoToString(atr2.tipo);;
+        if (atr1.lista){
+            tipo_atr1 = "Lista " + tipo_atr1;
+        }
+        if (atr2.lista){
+            tipo_atr2 = "Lista " + tipo_atr2;
+        }
+
+        printf("Error semantico en la linea %d: Operador solo aplicable a variables del mismo tipo, encontrados tipos diferentes %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str());
+    }
+}
+
+void comprobarAtsign (atributos atr1, atributos atr2){
+    if ( (atr2.tipo != entero) || (atr1.lista == 0) ||
+         (atr2.lista == 1) ) {
+
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);;
+        string tipo_atr2 = tipoDatoToString(atr2.tipo);;
+        if (atr1.lista){
+            tipo_atr1 = "Lista " + tipo_atr1;
+        }
+        if (atr2.lista){
+            tipo_atr2 = "Lista " + tipo_atr2;
+        }
+
+        printf("Error semantico en la linea %d: Operador solo aplicable a variables del mismo tipo, encontrados tipos diferentes %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str());
+    }
+}
+
+
 
 dtipo comprobarOpUnarios( atributos exp ){
 

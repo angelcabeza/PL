@@ -103,22 +103,22 @@
 %token WORD
 %token INISQR 
 %token ENDSQR
-%left CONCATENATE
 
+%right ATSIGN 
+%right PLUSPLUS
+%left CONCATENATE
+%left MINMIN
 %left ORLOG
 %left ANDLOG
 %left EXOR
 %left EQUALS
 %left COMPAR
-
 %left ADDITION
 %left MULTI
-%right PLUSPLUS 
-%left MINMIN
+
 %right UNARI
 %right LISTOP2
 %right LISTOP1 
-%right ATSIGN 
 
 %left INISQR 
 %left ENDSQR
@@ -221,7 +221,6 @@ Lec :  Lec COMMA Exp { TS_subprog_inserta($3); $$.lexema = $1.lexema + ", " + $3
     | WORD { TS_subprog_inserta($1); $$.lexema = $1.lexema;}
     |
 ;
-
 %%
 
 #include "lex.yy.c"

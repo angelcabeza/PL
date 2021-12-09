@@ -75,7 +75,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 "@" return ATSIGN; 
 {word} return WORD;
 {id} return ID;
-[\n\r\t ] ECHO;
+[\n\r\t ] ;
 . printf("\n\n \tERROR LEXICO: la palabra %s en la linea %d \n\n\t",yytext,yylineno);
 
 %%

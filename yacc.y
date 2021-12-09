@@ -81,6 +81,7 @@ Vl  : Vl Cdv
 
 Cdv : TYPEVAR Lv SEMICOLON
     | LIST TYPEVAR Lv SEMICOLON
+    | error
 ;
 
 Lv  : Lv COMMA ID 
@@ -123,6 +124,7 @@ Se  : B
     | RETURN Exp SEMICOLON 
     | Exp LISTOP1 
     | LISTOP2 Exp
+    | ID INIPA Lec ENDPA SEMICOLON
 ;
 
 Lvread  : WORD COMMA Lv

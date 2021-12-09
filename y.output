@@ -1,4 +1,4 @@
-State 122 conflicts: 1 shift/reduce
+State 124 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -7,193 +7,179 @@ Grammar
 
     1 S: MAIN B
 
-    2 B: INIBLO Dvl Dss Ses ENDBLO
+    2 $@1: %empty
 
-    3 Dvl: INIVAR Vl ENDVAR
-    4    | %empty
+    3 B: INIBLO $@1 Dvl Dss Ses ENDBLO
 
-    5 Vl: Vl Cdv
-    6   | Cdv
+    4 Dvl: INIVAR Vl ENDVAR
+    5    | %empty
 
-    7 Cdv: TYPEVAR Lv SEMICOLON
-    8    | El SEMICOLON
+    6 Vl: Vl Cdv
+    7   | Cdv
 
-    9 Lv: Lv COMMA ID
-   10   | ID
+    8 Cdv: TYPEVAR Lv SEMICOLON
+    9    | LIST TYPEVAR Lv SEMICOLON
 
-   11 El: LIST TYPEVAR Lv
+   10 Lv: Lv COMMA ID
+   11   | ID
+   12   | error
 
-   12 Dss: Dss Ds
-   13    | %empty
+   13 Dss: Dss Ds
+   14    | %empty
 
-   14 Ds: Cs B
+   15 $@2: %empty
 
-   15 Cs: Dc ID INIPA Pa ENDPA
-   16   | Dc ID INIPA ENDPA
+   16 Ds: Cs $@2 B
 
-   17 Dc: LIST TYPEVAR
-   18   | TYPEVAR
+   17 Cs: Dc ID INIPA Pa ENDPA
+   18   | Dc ID INIPA ENDPA
+   19   | error
 
-   19 Pa: Pa COMMA Dc ID
-   20   | Dc ID
+   20 Dc: LIST TYPEVAR
+   21   | TYPEVAR
 
-   21 Ses: Ses Se
-   22    | Se
+   22 Pa: Pa COMMA Dc ID
+   23   | Dc ID
 
-   23 Se: B
-   24   | ID ASIGN Exp SEMICOLON
-   25   | IF INIPA Exp ENDPA Se
-   26   | IF INIPA Exp ENDPA Se ELSE Se
-   27   | WHILE INIPA Exp ENDPA Se
-   28   | FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Se
-   29   | READ Lv SEMICOLON
-   30   | PRINT Lec SEMICOLON
-   31   | RETURN Exp SEMICOLON
-   32   | Exp LISTOP1
-   33   | LISTOP2 Exp
+   24 Ses: Ses Se
+   25    | Se
 
-   34 Exp: INIPA Exp ENDPA
-   35    | UNARI Exp
-   36    | ADDITION Exp
-   37    | PLUSPLUS Exp
-   38    | MINMIN Exp
-   39    | Exp Bin_op Exp
-   40    | Exp BINOP Exp
-   41    | ID PLUSPLUS CONST_INT ATSIGN CONST_INT
-   42    | ID INIPA Vle ENDPA
-   43    | ID
-   44    | Const
-   45    | INISQR lc ENDSQR
+   26 Se: B
+   27   | ID ASIGN Exp SEMICOLON
+   28   | IF INIPA Exp ENDPA Se
+   29   | IF INIPA Exp ENDPA Se ELSE Se
+   30   | WHILE INIPA Exp ENDPA Se
+   31   | FOR ID ASIGN Exp ITEFOR Exp DO Se
+   32   | READ Lvread SEMICOLON
+   33   | PRINT Lec SEMICOLON
+   34   | RETURN Exp SEMICOLON
+   35   | Exp LISTOP1
+   36   | LISTOP2 Exp
 
-   46 Bin_op: ADDITION
-   47       | ATSIGN
-   48       | MINMIN
-   49       | COMPAR
-   50       | EQUALS
-   51       | ORLOG
-   52       | ANDLOG
-   53       | EXOR
-   54       | MULTI
+   37 Lvread: WORD COMMA Lv
+   38       | Lv
 
-   55 Const: CONSTANT
-   56      | CONST_INT
+   39 Exp: INIPA Exp ENDPA
+   40    | UNARI Exp
+   41    | ADDITION Exp
+   42    | Exp ADDITION Exp
+   43    | Exp ATSIGN Exp
+   44    | Exp MINMIN Exp
+   45    | Exp COMPAR Exp
+   46    | Exp EQUALS Exp
+   47    | Exp ORLOG Exp
+   48    | Exp ANDLOG Exp
+   49    | Exp EXOR Exp
+   50    | Exp MULTI Exp
+   51    | Exp CONCATENATE Exp
+   52    | Exp PLUSPLUS CONSTANT ATSIGN Exp
+   53    | ID INIPA Lec ENDPA
+   54    | ID
+   55    | CONSTANT
+   56    | INISQR lc ENDSQR
+   57    | error
 
-   57 Con: CONSTANT
-   58    | CONSTANT_INT
+   58 lc: lc COMMA CONSTANT
+   59   | CONSTANT
 
-   59 lc: lc COMMA Con
-   60   | Con
-
-   61 Lec: Lec COMMA Exp
-   62    | Lec COMMA WORD
-   63    | Exp
-   64    | WORD
-
-   65 Vle: Le
-   66    | %empty
-
-   67 Le: Le COMMA Exp
-   68   | Exp
+   60 Lec: Lec COMMA Exp
+   61    | Lec COMMA WORD
+   62    | Exp
+   63    | WORD
+   64    | %empty
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-error (256)
-UNARI (258) 35
-ADDITION (259) 36 46
-LISTOP2 (260) 33
-MINMIN (261) 38 48
-PLUSPLUS (262) 37 41
-BINOP (263) 40
-ATSIGN (264) 41 47
-MAIN (265) 1
-INIBLO (266) 2
-ENDBLO (267) 2
-INIVAR (268) 3
-ENDVAR (269) 3
-TYPEVAR (270) 7 11 17 18
-SEMICOLON (271) 7 8 24 29 30 31
-COMMA (272) 9 19 59 61 62 67
-ID (273) 9 10 15 16 19 20 24 28 41 42 43
-INIPA (274) 15 16 25 26 27 34 42
-ENDPA (275) 15 16 25 26 27 34 42
-LIST (276) 11 17
-IF (277) 25 26
-ELSE (278) 26
-FOR (279) 28
-WHILE (280) 27
-ASIGN (281) 24 28
-CONST_INT (282) 28 41 56
-ITEFOR (283) 28
-DO (284) 28
-READ (285) 29
-PRINT (286) 30
-RETURN (287) 31
-LISTOP1 (288) 32
-CONSTANT (289) 55 57
-CONSTANT_INT (290) 58
-WORD (291) 62 64
-INISQR (292) 45
-ENDSQR (293) 45
-ORLOG (294) 51
-ANDLOG (295) 52
-EXOR (296) 53
-EQUALS (297) 50
-COMPAR (298) 49
-MULTI (299) 54
+error (256) 12 19 57
+UNARI (258) 40
+ADDITION (259) 41 42
+LISTOP2 (260) 36
+MINMIN (261) 44
+PLUSPLUS (262) 52
+ATSIGN (263) 43 52
+MAIN (264) 1
+INIBLO (265) 3
+ENDBLO (266) 3
+INIVAR (267) 4
+ENDVAR (268) 4
+TYPEVAR (269) 8 9 20 21
+SEMICOLON (270) 8 9 27 32 33 34
+COMMA (271) 10 22 37 58 60 61
+ID (272) 10 11 17 18 22 23 27 31 53 54
+INIPA (273) 17 18 28 29 30 39 53
+ENDPA (274) 17 18 28 29 30 39 53
+LIST (275) 9 20
+IF (276) 28 29
+ELSE (277) 29
+FOR (278) 31
+WHILE (279) 30
+ASIGN (280) 27 31
+ITEFOR (281) 31
+DO (282) 31
+READ (283) 32
+PRINT (284) 33
+RETURN (285) 34
+CONSTANT (286) 52 55 58 59
+WORD (287) 37 61 63
+INISQR (288) 56
+ENDSQR (289) 56
+CONCATENATE (290) 51
+ORLOG (291) 47
+ANDLOG (292) 48
+EXOR (293) 49
+EQUALS (294) 46
+COMPAR (295) 45
+MULTI (296) 50
+LISTOP1 (297) 35
 
 
 Nonterminals, with rules where they appear
 
-$accept (45)
+$accept (43)
     on left: 0
-S (46)
+S (44)
     on left: 1, on right: 0
-B (47)
-    on left: 2, on right: 1 14 23
-Dvl (48)
-    on left: 3 4, on right: 2
-Vl (49)
-    on left: 5 6, on right: 3 5
-Cdv (50)
-    on left: 7 8, on right: 5 6
-Lv (51)
-    on left: 9 10, on right: 7 9 11 29
-El (52)
-    on left: 11, on right: 8
-Dss (53)
-    on left: 12 13, on right: 2 12
-Ds (54)
-    on left: 14, on right: 12
-Cs (55)
-    on left: 15 16, on right: 14
-Dc (56)
-    on left: 17 18, on right: 15 16 19 20
-Pa (57)
-    on left: 19 20, on right: 15 19
-Ses (58)
-    on left: 21 22, on right: 2 21
-Se (59)
-    on left: 23 24 25 26 27 28 29 30 31 32 33, on right: 21 22 25 26
-    27 28
+B (45)
+    on left: 3, on right: 1 16 26
+$@1 (46)
+    on left: 2, on right: 3
+Dvl (47)
+    on left: 4 5, on right: 3
+Vl (48)
+    on left: 6 7, on right: 4 6
+Cdv (49)
+    on left: 8 9, on right: 6 7
+Lv (50)
+    on left: 10 11 12, on right: 8 9 10 37 38
+Dss (51)
+    on left: 13 14, on right: 3 13
+Ds (52)
+    on left: 16, on right: 13
+$@2 (53)
+    on left: 15, on right: 16
+Cs (54)
+    on left: 17 18 19, on right: 16
+Dc (55)
+    on left: 20 21, on right: 17 18 22 23
+Pa (56)
+    on left: 22 23, on right: 17 22
+Ses (57)
+    on left: 24 25, on right: 3 24
+Se (58)
+    on left: 26 27 28 29 30 31 32 33 34 35 36, on right: 24 25 28 29
+    30 31
+Lvread (59)
+    on left: 37 38, on right: 32
 Exp (60)
-    on left: 34 35 36 37 38 39 40 41 42 43 44 45, on right: 24 25 26
-    27 31 32 33 34 35 36 37 38 39 40 61 63 67 68
-Bin_op (61)
-    on left: 46 47 48 49 50 51 52 53 54, on right: 39
-Const (62)
-    on left: 55 56, on right: 44
-Con (63)
-    on left: 57 58, on right: 59 60
-lc (64)
-    on left: 59 60, on right: 45 59
-Lec (65)
-    on left: 61 62 63 64, on right: 30 61 62
-Vle (66)
-    on left: 65 66, on right: 42
-Le (67)
-    on left: 67 68, on right: 65 67
+    on left: 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56
+    57, on right: 27 28 29 30 31 34 35 36 39 40 41 42 43 44 45 46 47
+    48 49 50 51 52 60 62
+lc (61)
+    on left: 58 59, on right: 56 58
+Lec (62)
+    on left: 60 61 62 63 64, on right: 33 53 60 61
 
 
 State 0
@@ -223,13 +209,11 @@ State 2
 
 State 3
 
-    2 B: INIBLO . Dvl Dss Ses ENDBLO
+    3 B: INIBLO . $@1 Dvl Dss Ses ENDBLO
 
-    INIVAR  shift, and go to state 6
+    $default  reduce using rule 2 ($@1)
 
-    $default  reduce using rule 4 (Dvl)
-
-    Dvl  go to state 7
+    $@1  go to state 6
 
 
 State 4
@@ -248,1506 +232,1785 @@ State 5
 
 State 6
 
-    3 Dvl: INIVAR . Vl ENDVAR
+    3 B: INIBLO $@1 . Dvl Dss Ses ENDBLO
 
-    TYPEVAR  shift, and go to state 8
-    LIST     shift, and go to state 9
+    INIVAR  shift, and go to state 7
 
-    Vl   go to state 10
-    Cdv  go to state 11
-    El   go to state 12
+    $default  reduce using rule 5 (Dvl)
+
+    Dvl  go to state 8
 
 
 State 7
 
-    2 B: INIBLO Dvl . Dss Ses ENDBLO
+    4 Dvl: INIVAR . Vl ENDVAR
 
-    $default  reduce using rule 13 (Dss)
+    TYPEVAR  shift, and go to state 9
+    LIST     shift, and go to state 10
 
-    Dss  go to state 13
+    Vl   go to state 11
+    Cdv  go to state 12
 
 
 State 8
 
-    7 Cdv: TYPEVAR . Lv SEMICOLON
+    3 B: INIBLO $@1 Dvl . Dss Ses ENDBLO
 
-    ID  shift, and go to state 14
+    $default  reduce using rule 14 (Dss)
 
-    Lv  go to state 15
+    Dss  go to state 13
 
 
 State 9
 
-   11 El: LIST . TYPEVAR Lv
+    8 Cdv: TYPEVAR . Lv SEMICOLON
 
-    TYPEVAR  shift, and go to state 16
+    error  shift, and go to state 14
+    ID     shift, and go to state 15
+
+    Lv  go to state 16
 
 
 State 10
 
-    3 Dvl: INIVAR Vl . ENDVAR
-    5 Vl: Vl . Cdv
+    9 Cdv: LIST . TYPEVAR Lv SEMICOLON
 
-    ENDVAR   shift, and go to state 17
-    TYPEVAR  shift, and go to state 8
-    LIST     shift, and go to state 9
-
-    Cdv  go to state 18
-    El   go to state 12
+    TYPEVAR  shift, and go to state 17
 
 
 State 11
 
-    6 Vl: Cdv .
+    4 Dvl: INIVAR Vl . ENDVAR
+    6 Vl: Vl . Cdv
 
-    $default  reduce using rule 6 (Vl)
+    ENDVAR   shift, and go to state 18
+    TYPEVAR  shift, and go to state 9
+    LIST     shift, and go to state 10
+
+    Cdv  go to state 19
 
 
 State 12
 
-    8 Cdv: El . SEMICOLON
+    7 Vl: Cdv .
 
-    SEMICOLON  shift, and go to state 19
+    $default  reduce using rule 7 (Vl)
 
 
 State 13
 
-    2 B: INIBLO Dvl Dss . Ses ENDBLO
-   12 Dss: Dss . Ds
+    3 B: INIBLO $@1 Dvl Dss . Ses ENDBLO
+   13 Dss: Dss . Ds
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    TYPEVAR    shift, and go to state 25
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    LIST       shift, and go to state 28
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
+    error     shift, and go to state 20
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    TYPEVAR   shift, and go to state 24
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    LIST      shift, and go to state 27
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    B      go to state 38
-    Ds     go to state 39
-    Cs     go to state 40
-    Dc     go to state 41
-    Ses    go to state 42
-    Se     go to state 43
-    Exp    go to state 44
-    Const  go to state 45
+    B    go to state 36
+    Ds   go to state 37
+    Cs   go to state 38
+    Dc   go to state 39
+    Ses  go to state 40
+    Se   go to state 41
+    Exp  go to state 42
 
 
 State 14
 
-   10 Lv: ID .
+   12 Lv: error .
 
-    $default  reduce using rule 10 (Lv)
+    $default  reduce using rule 12 (Lv)
 
 
 State 15
 
-    7 Cdv: TYPEVAR Lv . SEMICOLON
-    9 Lv: Lv . COMMA ID
+   11 Lv: ID .
 
-    SEMICOLON  shift, and go to state 46
-    COMMA      shift, and go to state 47
+    $default  reduce using rule 11 (Lv)
 
 
 State 16
 
-   11 El: LIST TYPEVAR . Lv
+    8 Cdv: TYPEVAR Lv . SEMICOLON
+   10 Lv: Lv . COMMA ID
 
-    ID  shift, and go to state 14
-
-    Lv  go to state 48
+    SEMICOLON  shift, and go to state 43
+    COMMA      shift, and go to state 44
 
 
 State 17
 
-    3 Dvl: INIVAR Vl ENDVAR .
+    9 Cdv: LIST TYPEVAR . Lv SEMICOLON
 
-    $default  reduce using rule 3 (Dvl)
+    error  shift, and go to state 14
+    ID     shift, and go to state 15
+
+    Lv  go to state 45
 
 
 State 18
 
-    5 Vl: Vl Cdv .
+    4 Dvl: INIVAR Vl ENDVAR .
 
-    $default  reduce using rule 5 (Vl)
+    $default  reduce using rule 4 (Dvl)
 
 
 State 19
 
-    8 Cdv: El SEMICOLON .
+    6 Vl: Vl Cdv .
 
-    $default  reduce using rule 8 (Cdv)
+    $default  reduce using rule 6 (Vl)
 
 
 State 20
 
-   35 Exp: UNARI . Exp
+   19 Cs: error .
+   57 Exp: error .
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 50
-    Const  go to state 45
+    INIBLO    reduce using rule 19 (Cs)
+    $default  reduce using rule 57 (Exp)
 
 
 State 21
 
-   36 Exp: ADDITION . Exp
+   40 Exp: UNARI . Exp
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    Exp    go to state 51
-    Const  go to state 45
+    Exp  go to state 48
 
 
 State 22
 
-   33 Se: LISTOP2 . Exp
+   41 Exp: ADDITION . Exp
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    Exp    go to state 52
-    Const  go to state 45
+    Exp  go to state 49
 
 
 State 23
 
-   38 Exp: MINMIN . Exp
+   36 Se: LISTOP2 . Exp
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    Exp    go to state 53
-    Const  go to state 45
+    Exp  go to state 50
 
 
 State 24
 
-   37 Exp: PLUSPLUS . Exp
+   21 Dc: TYPEVAR .
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 54
-    Const  go to state 45
+    $default  reduce using rule 21 (Dc)
 
 
 State 25
 
-   18 Dc: TYPEVAR .
+   27 Se: ID . ASIGN Exp SEMICOLON
+   53 Exp: ID . INIPA Lec ENDPA
+   54    | ID .
 
-    $default  reduce using rule 18 (Dc)
+    INIPA  shift, and go to state 51
+    ASIGN  shift, and go to state 52
+
+    $default  reduce using rule 54 (Exp)
 
 
 State 26
 
-   24 Se: ID . ASIGN Exp SEMICOLON
-   41 Exp: ID . PLUSPLUS CONST_INT ATSIGN CONST_INT
-   42    | ID . INIPA Vle ENDPA
-   43    | ID .
+   39 Exp: INIPA . Exp ENDPA
 
-    PLUSPLUS  shift, and go to state 55
-    INIPA     shift, and go to state 56
-    ASIGN     shift, and go to state 57
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    $default  reduce using rule 43 (Exp)
+    Exp  go to state 53
 
 
 State 27
 
-   34 Exp: INIPA . Exp ENDPA
+   20 Dc: LIST . TYPEVAR
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 58
-    Const  go to state 45
+    TYPEVAR  shift, and go to state 54
 
 
 State 28
 
-   17 Dc: LIST . TYPEVAR
+   28 Se: IF . INIPA Exp ENDPA Se
+   29   | IF . INIPA Exp ENDPA Se ELSE Se
 
-    TYPEVAR  shift, and go to state 59
+    INIPA  shift, and go to state 55
 
 
 State 29
 
-   25 Se: IF . INIPA Exp ENDPA Se
-   26   | IF . INIPA Exp ENDPA Se ELSE Se
+   31 Se: FOR . ID ASIGN Exp ITEFOR Exp DO Se
 
-    INIPA  shift, and go to state 60
+    ID  shift, and go to state 56
 
 
 State 30
 
-   28 Se: FOR . ID ASIGN CONST_INT ITEFOR CONST_INT DO Se
+   30 Se: WHILE . INIPA Exp ENDPA Se
 
-    ID  shift, and go to state 61
+    INIPA  shift, and go to state 57
 
 
 State 31
 
-   27 Se: WHILE . INIPA Exp ENDPA Se
+   32 Se: READ . Lvread SEMICOLON
 
-    INIPA  shift, and go to state 62
+    error  shift, and go to state 14
+    ID     shift, and go to state 15
+    WORD   shift, and go to state 58
+
+    Lv      go to state 59
+    Lvread  go to state 60
 
 
 State 32
 
-   56 Const: CONST_INT .
+   33 Se: PRINT . Lec SEMICOLON
 
-    $default  reduce using rule 56 (Const)
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    WORD      shift, and go to state 61
+    INISQR    shift, and go to state 35
+
+    SEMICOLON  reduce using rule 64 (Lec)
+    COMMA      reduce using rule 64 (Lec)
+
+    Exp  go to state 62
+    Lec  go to state 63
 
 
 State 33
 
-   29 Se: READ . Lv SEMICOLON
+   34 Se: RETURN . Exp SEMICOLON
 
-    ID  shift, and go to state 14
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
 
-    Lv  go to state 63
+    Exp  go to state 64
 
 
 State 34
 
-   30 Se: PRINT . Lec SEMICOLON
+   55 Exp: CONSTANT .
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    WORD       shift, and go to state 64
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 65
-    Const  go to state 45
-    Lec    go to state 66
+    $default  reduce using rule 55 (Exp)
 
 
 State 35
 
-   31 Se: RETURN . Exp SEMICOLON
+   56 Exp: INISQR . lc ENDSQR
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
+    CONSTANT  shift, and go to state 65
 
-    Exp    go to state 67
-    Const  go to state 45
+    lc  go to state 66
 
 
 State 36
 
-   55 Const: CONSTANT .
-
-    $default  reduce using rule 55 (Const)
-
-
-State 37
-
-   45 Exp: INISQR . lc ENDSQR
-
-    CONSTANT      shift, and go to state 68
-    CONSTANT_INT  shift, and go to state 69
-
-    Con  go to state 70
-    lc   go to state 71
-
-
-State 38
-
-   23 Se: B .
-
-    $default  reduce using rule 23 (Se)
-
-
-State 39
-
-   12 Dss: Dss Ds .
-
-    $default  reduce using rule 12 (Dss)
-
-
-State 40
-
-   14 Ds: Cs . B
-
-    INIBLO  shift, and go to state 3
-
-    B  go to state 72
-
-
-State 41
-
-   15 Cs: Dc . ID INIPA Pa ENDPA
-   16   | Dc . ID INIPA ENDPA
-
-    ID  shift, and go to state 73
-
-
-State 42
-
-    2 B: INIBLO Dvl Dss Ses . ENDBLO
-   21 Ses: Ses . Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    ENDBLO     shift, and go to state 74
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    B      go to state 38
-    Se     go to state 75
-    Exp    go to state 44
-    Const  go to state 45
-
-
-State 43
-
-   22 Ses: Se .
-
-    $default  reduce using rule 22 (Ses)
-
-
-State 44
-
-   32 Se: Exp . LISTOP1
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    LISTOP1   shift, and go to state 80
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 45
-
-   44 Exp: Const .
-
-    $default  reduce using rule 44 (Exp)
-
-
-State 46
-
-    7 Cdv: TYPEVAR Lv SEMICOLON .
-
-    $default  reduce using rule 7 (Cdv)
-
-
-State 47
-
-    9 Lv: Lv COMMA . ID
-
-    ID  shift, and go to state 88
-
-
-State 48
-
-    9 Lv: Lv . COMMA ID
-   11 El: LIST TYPEVAR Lv .
-
-    COMMA  shift, and go to state 47
-
-    $default  reduce using rule 11 (El)
-
-
-State 49
-
-   41 Exp: ID . PLUSPLUS CONST_INT ATSIGN CONST_INT
-   42    | ID . INIPA Vle ENDPA
-   43    | ID .
-
-    PLUSPLUS  shift, and go to state 55
-    INIPA     shift, and go to state 56
-
-    $default  reduce using rule 43 (Exp)
-
-
-State 50
-
-   35 Exp: UNARI Exp .
-   39    | Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    ATSIGN    shift, and go to state 79
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 35 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 51
-
-   36 Exp: ADDITION Exp .
-   39    | Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    MINMIN  shift, and go to state 77
-    ATSIGN  shift, and go to state 79
-    MULTI   shift, and go to state 86
-
-    $default  reduce using rule 36 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 52
-
-   33 Se: LISTOP2 Exp .
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    MINMIN  shift, and go to state 77
-    BINOP   shift, and go to state 78
-    ATSIGN  shift, and go to state 79
-    ORLOG   shift, and go to state 81
-    ANDLOG  shift, and go to state 82
-    EXOR    shift, and go to state 83
-    EQUALS  shift, and go to state 84
-    COMPAR  shift, and go to state 85
-    MULTI   shift, and go to state 86
-
-    $default  reduce using rule 33 (Se)
-
-    Bin_op  go to state 87
-
-
-State 53
-
-   38 Exp: MINMIN Exp .
-   39    | Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    MINMIN  shift, and go to state 77
-    ATSIGN  shift, and go to state 79
-
-    $default  reduce using rule 38 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 54
-
-   37 Exp: PLUSPLUS Exp .
-   39    | Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    ATSIGN    shift, and go to state 79
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 37 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 55
-
-   41 Exp: ID PLUSPLUS . CONST_INT ATSIGN CONST_INT
-
-    CONST_INT  shift, and go to state 89
-
-
-State 56
-
-   42 Exp: ID INIPA . Vle ENDPA
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    $default  reduce using rule 66 (Vle)
-
-    Exp    go to state 90
-    Const  go to state 45
-    Vle    go to state 91
-    Le     go to state 92
-
-
-State 57
-
-   24 Se: ID ASIGN . Exp SEMICOLON
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 93
-    Const  go to state 45
-
-
-State 58
-
-   34 Exp: INIPA Exp . ENDPA
-   39    | Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ENDPA     shift, and go to state 94
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 59
-
-   17 Dc: LIST TYPEVAR .
-
-    $default  reduce using rule 17 (Dc)
-
-
-State 60
-
-   25 Se: IF INIPA . Exp ENDPA Se
-   26   | IF INIPA . Exp ENDPA Se ELSE Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 95
-    Const  go to state 45
-
-
-State 61
-
-   28 Se: FOR ID . ASIGN CONST_INT ITEFOR CONST_INT DO Se
-
-    ASIGN  shift, and go to state 96
-
-
-State 62
-
-   27 Se: WHILE INIPA . Exp ENDPA Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 97
-    Const  go to state 45
-
-
-State 63
-
-    9 Lv: Lv . COMMA ID
-   29 Se: READ Lv . SEMICOLON
-
-    SEMICOLON  shift, and go to state 98
-    COMMA      shift, and go to state 47
-
-
-State 64
-
-   64 Lec: WORD .
-
-    $default  reduce using rule 64 (Lec)
-
-
-State 65
-
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-   63 Lec: Exp .
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 63 (Lec)
-
-    Bin_op  go to state 87
-
-
-State 66
-
-   30 Se: PRINT Lec . SEMICOLON
-   61 Lec: Lec . COMMA Exp
-   62    | Lec . COMMA WORD
-
-    SEMICOLON  shift, and go to state 99
-    COMMA      shift, and go to state 100
-
-
-State 67
-
-   31 Se: RETURN Exp . SEMICOLON
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION   shift, and go to state 76
-    MINMIN     shift, and go to state 77
-    BINOP      shift, and go to state 78
-    ATSIGN     shift, and go to state 79
-    SEMICOLON  shift, and go to state 101
-    ORLOG      shift, and go to state 81
-    ANDLOG     shift, and go to state 82
-    EXOR       shift, and go to state 83
-    EQUALS     shift, and go to state 84
-    COMPAR     shift, and go to state 85
-    MULTI      shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 68
-
-   57 Con: CONSTANT .
-
-    $default  reduce using rule 57 (Con)
-
-
-State 69
-
-   58 Con: CONSTANT_INT .
-
-    $default  reduce using rule 58 (Con)
-
-
-State 70
-
-   60 lc: Con .
-
-    $default  reduce using rule 60 (lc)
-
-
-State 71
-
-   45 Exp: INISQR lc . ENDSQR
-   59 lc: lc . COMMA Con
-
-    COMMA   shift, and go to state 102
-    ENDSQR  shift, and go to state 103
-
-
-State 72
-
-   14 Ds: Cs B .
-
-    $default  reduce using rule 14 (Ds)
-
-
-State 73
-
-   15 Cs: Dc ID . INIPA Pa ENDPA
-   16   | Dc ID . INIPA ENDPA
-
-    INIPA  shift, and go to state 104
-
-
-State 74
-
-    2 B: INIBLO Dvl Dss Ses ENDBLO .
-
-    $default  reduce using rule 2 (B)
-
-
-State 75
-
-   21 Ses: Ses Se .
-
-    $default  reduce using rule 21 (Ses)
-
-
-State 76
-
-   46 Bin_op: ADDITION .
-
-    $default  reduce using rule 46 (Bin_op)
-
-
-State 77
-
-   48 Bin_op: MINMIN .
-
-    $default  reduce using rule 48 (Bin_op)
-
-
-State 78
-
-   40 Exp: Exp BINOP . Exp
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 105
-    Const  go to state 45
-
-
-State 79
-
-   47 Bin_op: ATSIGN .
-
-    $default  reduce using rule 47 (Bin_op)
-
-
-State 80
-
-   32 Se: Exp LISTOP1 .
-
-    $default  reduce using rule 32 (Se)
-
-
-State 81
-
-   51 Bin_op: ORLOG .
-
-    $default  reduce using rule 51 (Bin_op)
-
-
-State 82
-
-   52 Bin_op: ANDLOG .
-
-    $default  reduce using rule 52 (Bin_op)
-
-
-State 83
-
-   53 Bin_op: EXOR .
-
-    $default  reduce using rule 53 (Bin_op)
-
-
-State 84
-
-   50 Bin_op: EQUALS .
-
-    $default  reduce using rule 50 (Bin_op)
-
-
-State 85
-
-   49 Bin_op: COMPAR .
-
-    $default  reduce using rule 49 (Bin_op)
-
-
-State 86
-
-   54 Bin_op: MULTI .
-
-    $default  reduce using rule 54 (Bin_op)
-
-
-State 87
-
-   39 Exp: Exp Bin_op . Exp
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 106
-    Const  go to state 45
-
-
-State 88
-
-    9 Lv: Lv COMMA ID .
-
-    $default  reduce using rule 9 (Lv)
-
-
-State 89
-
-   41 Exp: ID PLUSPLUS CONST_INT . ATSIGN CONST_INT
-
-    ATSIGN  shift, and go to state 107
-
-
-State 90
-
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-   68 Le: Exp .
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 68 (Le)
-
-    Bin_op  go to state 87
-
-
-State 91
-
-   42 Exp: ID INIPA Vle . ENDPA
-
-    ENDPA  shift, and go to state 108
-
-
-State 92
-
-   65 Vle: Le .
-   67 Le: Le . COMMA Exp
-
-    COMMA  shift, and go to state 109
-
-    $default  reduce using rule 65 (Vle)
-
-
-State 93
-
-   24 Se: ID ASIGN Exp . SEMICOLON
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION   shift, and go to state 76
-    MINMIN     shift, and go to state 77
-    BINOP      shift, and go to state 78
-    ATSIGN     shift, and go to state 79
-    SEMICOLON  shift, and go to state 110
-    ORLOG      shift, and go to state 81
-    ANDLOG     shift, and go to state 82
-    EXOR       shift, and go to state 83
-    EQUALS     shift, and go to state 84
-    COMPAR     shift, and go to state 85
-    MULTI      shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 94
-
-   34 Exp: INIPA Exp ENDPA .
-
-    $default  reduce using rule 34 (Exp)
-
-
-State 95
-
-   25 Se: IF INIPA Exp . ENDPA Se
-   26   | IF INIPA Exp . ENDPA Se ELSE Se
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ENDPA     shift, and go to state 111
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 96
-
-   28 Se: FOR ID ASIGN . CONST_INT ITEFOR CONST_INT DO Se
-
-    CONST_INT  shift, and go to state 112
-
-
-State 97
-
-   27 Se: WHILE INIPA Exp . ENDPA Se
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ENDPA     shift, and go to state 113
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    Bin_op  go to state 87
-
-
-State 98
-
-   29 Se: READ Lv SEMICOLON .
-
-    $default  reduce using rule 29 (Se)
-
-
-State 99
-
-   30 Se: PRINT Lec SEMICOLON .
-
-    $default  reduce using rule 30 (Se)
-
-
-State 100
-
-   61 Lec: Lec COMMA . Exp
-   62    | Lec COMMA . WORD
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    WORD       shift, and go to state 114
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 115
-    Const  go to state 45
-
-
-State 101
-
-   31 Se: RETURN Exp SEMICOLON .
-
-    $default  reduce using rule 31 (Se)
-
-
-State 102
-
-   59 lc: lc COMMA . Con
-
-    CONSTANT      shift, and go to state 68
-    CONSTANT_INT  shift, and go to state 69
-
-    Con  go to state 116
-
-
-State 103
-
-   45 Exp: INISQR lc ENDSQR .
-
-    $default  reduce using rule 45 (Exp)
-
-
-State 104
-
-   15 Cs: Dc ID INIPA . Pa ENDPA
-   16   | Dc ID INIPA . ENDPA
-
-    TYPEVAR  shift, and go to state 25
-    ENDPA    shift, and go to state 117
-    LIST     shift, and go to state 28
-
-    Dc  go to state 118
-    Pa  go to state 119
-
-
-State 105
-
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-   40    | Exp BINOP Exp .
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    ATSIGN    shift, and go to state 79
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 40 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 106
-
-   39 Exp: Exp . Bin_op Exp
-   39    | Exp Bin_op Exp .
-   40    | Exp . BINOP Exp
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    ATSIGN    shift, and go to state 79
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 39 (Exp)
-
-    Bin_op  go to state 87
-
-
-State 107
-
-   41 Exp: ID PLUSPLUS CONST_INT ATSIGN . CONST_INT
-
-    CONST_INT  shift, and go to state 120
-
-
-State 108
-
-   42 Exp: ID INIPA Vle ENDPA .
-
-    $default  reduce using rule 42 (Exp)
-
-
-State 109
-
-   67 Le: Le COMMA . Exp
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    ID         shift, and go to state 49
-    INIPA      shift, and go to state 27
-    CONST_INT  shift, and go to state 32
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    Exp    go to state 121
-    Const  go to state 45
-
-
-State 110
-
-   24 Se: ID ASIGN Exp SEMICOLON .
-
-    $default  reduce using rule 24 (Se)
-
-
-State 111
-
-   25 Se: IF INIPA Exp ENDPA . Se
-   26   | IF INIPA Exp ENDPA . Se ELSE Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    B      go to state 38
-    Se     go to state 122
-    Exp    go to state 44
-    Const  go to state 45
-
-
-State 112
-
-   28 Se: FOR ID ASIGN CONST_INT . ITEFOR CONST_INT DO Se
-
-    ITEFOR  shift, and go to state 123
-
-
-State 113
-
-   27 Se: WHILE INIPA Exp ENDPA . Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    B      go to state 38
-    Se     go to state 124
-    Exp    go to state 44
-    Const  go to state 45
-
-
-State 114
-
-   62 Lec: Lec COMMA WORD .
-
-    $default  reduce using rule 62 (Lec)
-
-
-State 115
-
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-   61 Lec: Lec COMMA Exp .
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 61 (Lec)
-
-    Bin_op  go to state 87
-
-
-State 116
-
-   59 lc: lc COMMA Con .
-
-    $default  reduce using rule 59 (lc)
-
-
-State 117
-
-   16 Cs: Dc ID INIPA ENDPA .
-
-    $default  reduce using rule 16 (Cs)
-
-
-State 118
-
-   20 Pa: Dc . ID
-
-    ID  shift, and go to state 125
-
-
-State 119
-
-   15 Cs: Dc ID INIPA Pa . ENDPA
-   19 Pa: Pa . COMMA Dc ID
-
-    COMMA  shift, and go to state 126
-    ENDPA  shift, and go to state 127
-
-
-State 120
-
-   41 Exp: ID PLUSPLUS CONST_INT ATSIGN CONST_INT .
-
-    $default  reduce using rule 41 (Exp)
-
-
-State 121
-
-   39 Exp: Exp . Bin_op Exp
-   40    | Exp . BINOP Exp
-   67 Le: Le COMMA Exp .
-
-    ADDITION  shift, and go to state 76
-    MINMIN    shift, and go to state 77
-    BINOP     shift, and go to state 78
-    ATSIGN    shift, and go to state 79
-    ORLOG     shift, and go to state 81
-    ANDLOG    shift, and go to state 82
-    EXOR      shift, and go to state 83
-    EQUALS    shift, and go to state 84
-    COMPAR    shift, and go to state 85
-    MULTI     shift, and go to state 86
-
-    $default  reduce using rule 67 (Le)
-
-    Bin_op  go to state 87
-
-
-State 122
-
-   25 Se: IF INIPA Exp ENDPA Se .
-   26   | IF INIPA Exp ENDPA Se . ELSE Se
-
-    ELSE  shift, and go to state 128
-
-    ELSE      [reduce using rule 25 (Se)]
-    $default  reduce using rule 25 (Se)
-
-
-State 123
-
-   28 Se: FOR ID ASIGN CONST_INT ITEFOR . CONST_INT DO Se
-
-    CONST_INT  shift, and go to state 129
-
-
-State 124
-
-   27 Se: WHILE INIPA Exp ENDPA Se .
-
-    $default  reduce using rule 27 (Se)
-
-
-State 125
-
-   20 Pa: Dc ID .
-
-    $default  reduce using rule 20 (Pa)
-
-
-State 126
-
-   19 Pa: Pa COMMA . Dc ID
-
-    TYPEVAR  shift, and go to state 25
-    LIST     shift, and go to state 28
-
-    Dc  go to state 130
-
-
-State 127
-
-   15 Cs: Dc ID INIPA Pa ENDPA .
-
-    $default  reduce using rule 15 (Cs)
-
-
-State 128
-
-   26 Se: IF INIPA Exp ENDPA Se ELSE . Se
-
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    B      go to state 38
-    Se     go to state 131
-    Exp    go to state 44
-    Const  go to state 45
-
-
-State 129
-
-   28 Se: FOR ID ASIGN CONST_INT ITEFOR CONST_INT . DO Se
-
-    DO  shift, and go to state 132
-
-
-State 130
-
-   19 Pa: Pa COMMA Dc . ID
-
-    ID  shift, and go to state 133
-
-
-State 131
-
-   26 Se: IF INIPA Exp ENDPA Se ELSE Se .
+   26 Se: B .
 
     $default  reduce using rule 26 (Se)
 
 
+State 37
+
+   13 Dss: Dss Ds .
+
+    $default  reduce using rule 13 (Dss)
+
+
+State 38
+
+   16 Ds: Cs . $@2 B
+
+    $default  reduce using rule 15 ($@2)
+
+    $@2  go to state 67
+
+
+State 39
+
+   17 Cs: Dc . ID INIPA Pa ENDPA
+   18   | Dc . ID INIPA ENDPA
+
+    ID  shift, and go to state 68
+
+
+State 40
+
+    3 B: INIBLO $@1 Dvl Dss Ses . ENDBLO
+   24 Ses: Ses . Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    ENDBLO    shift, and go to state 69
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    B    go to state 36
+    Se   go to state 70
+    Exp  go to state 42
+
+
+State 41
+
+   25 Ses: Se .
+
+    $default  reduce using rule 25 (Ses)
+
+
+State 42
+
+   35 Se: Exp . LISTOP1
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+    LISTOP1      shift, and go to state 82
+
+
+State 43
+
+    8 Cdv: TYPEVAR Lv SEMICOLON .
+
+    $default  reduce using rule 8 (Cdv)
+
+
+State 44
+
+   10 Lv: Lv COMMA . ID
+
+    ID  shift, and go to state 83
+
+
+State 45
+
+    9 Cdv: LIST TYPEVAR Lv . SEMICOLON
+   10 Lv: Lv . COMMA ID
+
+    SEMICOLON  shift, and go to state 84
+    COMMA      shift, and go to state 44
+
+
+State 46
+
+   57 Exp: error .
+
+    $default  reduce using rule 57 (Exp)
+
+
+State 47
+
+   53 Exp: ID . INIPA Lec ENDPA
+   54    | ID .
+
+    INIPA  shift, and go to state 51
+
+    $default  reduce using rule 54 (Exp)
+
+
+State 48
+
+   40 Exp: UNARI Exp .
+   42    | Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ATSIGN  shift, and go to state 74
+
+    $default  reduce using rule 40 (Exp)
+
+
+State 49
+
+   41 Exp: ADDITION Exp .
+   42    | Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ATSIGN  shift, and go to state 74
+
+    $default  reduce using rule 41 (Exp)
+
+
+State 50
+
+   36 Se: LISTOP2 Exp .
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+    $default  reduce using rule 36 (Se)
+
+
+State 51
+
+   53 Exp: ID INIPA . Lec ENDPA
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    WORD      shift, and go to state 61
+    INISQR    shift, and go to state 35
+
+    COMMA  reduce using rule 64 (Lec)
+    ENDPA  reduce using rule 64 (Lec)
+
+    Exp  go to state 62
+    Lec  go to state 85
+
+
+State 52
+
+   27 Se: ID ASIGN . Exp SEMICOLON
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 86
+
+
+State 53
+
+   39 Exp: INIPA Exp . ENDPA
+   42    | Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    ENDPA        shift, and go to state 87
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 54
+
+   20 Dc: LIST TYPEVAR .
+
+    $default  reduce using rule 20 (Dc)
+
+
+State 55
+
+   28 Se: IF INIPA . Exp ENDPA Se
+   29   | IF INIPA . Exp ENDPA Se ELSE Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 88
+
+
+State 56
+
+   31 Se: FOR ID . ASIGN Exp ITEFOR Exp DO Se
+
+    ASIGN  shift, and go to state 89
+
+
+State 57
+
+   30 Se: WHILE INIPA . Exp ENDPA Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 90
+
+
+State 58
+
+   37 Lvread: WORD . COMMA Lv
+
+    COMMA  shift, and go to state 91
+
+
+State 59
+
+   10 Lv: Lv . COMMA ID
+   38 Lvread: Lv .
+
+    COMMA  shift, and go to state 44
+
+    $default  reduce using rule 38 (Lvread)
+
+
+State 60
+
+   32 Se: READ Lvread . SEMICOLON
+
+    SEMICOLON  shift, and go to state 92
+
+
+State 61
+
+   63 Lec: WORD .
+
+    $default  reduce using rule 63 (Lec)
+
+
+State 62
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   62 Lec: Exp .
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+    $default  reduce using rule 62 (Lec)
+
+
+State 63
+
+   33 Se: PRINT Lec . SEMICOLON
+   60 Lec: Lec . COMMA Exp
+   61    | Lec . COMMA WORD
+
+    SEMICOLON  shift, and go to state 93
+    COMMA      shift, and go to state 94
+
+
+State 64
+
+   34 Se: RETURN Exp . SEMICOLON
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    SEMICOLON    shift, and go to state 95
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 65
+
+   59 lc: CONSTANT .
+
+    $default  reduce using rule 59 (lc)
+
+
+State 66
+
+   56 Exp: INISQR lc . ENDSQR
+   58 lc: lc . COMMA CONSTANT
+
+    COMMA   shift, and go to state 96
+    ENDSQR  shift, and go to state 97
+
+
+State 67
+
+   16 Ds: Cs $@2 . B
+
+    INIBLO  shift, and go to state 3
+
+    B  go to state 98
+
+
+State 68
+
+   17 Cs: Dc ID . INIPA Pa ENDPA
+   18   | Dc ID . INIPA ENDPA
+
+    INIPA  shift, and go to state 99
+
+
+State 69
+
+    3 B: INIBLO $@1 Dvl Dss Ses ENDBLO .
+
+    $default  reduce using rule 3 (B)
+
+
+State 70
+
+   24 Ses: Ses Se .
+
+    $default  reduce using rule 24 (Ses)
+
+
+State 71
+
+   42 Exp: Exp ADDITION . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 100
+
+
+State 72
+
+   44 Exp: Exp MINMIN . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 101
+
+
+State 73
+
+   52 Exp: Exp PLUSPLUS . CONSTANT ATSIGN Exp
+
+    CONSTANT  shift, and go to state 102
+
+
+State 74
+
+   43 Exp: Exp ATSIGN . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 103
+
+
+State 75
+
+   51 Exp: Exp CONCATENATE . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 104
+
+
+State 76
+
+   47 Exp: Exp ORLOG . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 105
+
+
+State 77
+
+   48 Exp: Exp ANDLOG . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 106
+
+
+State 78
+
+   49 Exp: Exp EXOR . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 107
+
+
+State 79
+
+   46 Exp: Exp EQUALS . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 108
+
+
+State 80
+
+   45 Exp: Exp COMPAR . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 109
+
+
+State 81
+
+   50 Exp: Exp MULTI . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 110
+
+
+State 82
+
+   35 Se: Exp LISTOP1 .
+
+    $default  reduce using rule 35 (Se)
+
+
+State 83
+
+   10 Lv: Lv COMMA ID .
+
+    $default  reduce using rule 10 (Lv)
+
+
+State 84
+
+    9 Cdv: LIST TYPEVAR Lv SEMICOLON .
+
+    $default  reduce using rule 9 (Cdv)
+
+
+State 85
+
+   53 Exp: ID INIPA Lec . ENDPA
+   60 Lec: Lec . COMMA Exp
+   61    | Lec . COMMA WORD
+
+    COMMA  shift, and go to state 94
+    ENDPA  shift, and go to state 111
+
+
+State 86
+
+   27 Se: ID ASIGN Exp . SEMICOLON
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    SEMICOLON    shift, and go to state 112
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 87
+
+   39 Exp: INIPA Exp ENDPA .
+
+    $default  reduce using rule 39 (Exp)
+
+
+State 88
+
+   28 Se: IF INIPA Exp . ENDPA Se
+   29   | IF INIPA Exp . ENDPA Se ELSE Se
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    ENDPA        shift, and go to state 113
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 89
+
+   31 Se: FOR ID ASIGN . Exp ITEFOR Exp DO Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 114
+
+
+State 90
+
+   30 Se: WHILE INIPA Exp . ENDPA Se
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    ENDPA        shift, and go to state 115
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 91
+
+   37 Lvread: WORD COMMA . Lv
+
+    error  shift, and go to state 14
+    ID     shift, and go to state 15
+
+    Lv  go to state 116
+
+
+State 92
+
+   32 Se: READ Lvread SEMICOLON .
+
+    $default  reduce using rule 32 (Se)
+
+
+State 93
+
+   33 Se: PRINT Lec SEMICOLON .
+
+    $default  reduce using rule 33 (Se)
+
+
+State 94
+
+   60 Lec: Lec COMMA . Exp
+   61    | Lec COMMA . WORD
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    WORD      shift, and go to state 117
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 118
+
+
+State 95
+
+   34 Se: RETURN Exp SEMICOLON .
+
+    $default  reduce using rule 34 (Se)
+
+
+State 96
+
+   58 lc: lc COMMA . CONSTANT
+
+    CONSTANT  shift, and go to state 119
+
+
+State 97
+
+   56 Exp: INISQR lc ENDSQR .
+
+    $default  reduce using rule 56 (Exp)
+
+
+State 98
+
+   16 Ds: Cs $@2 B .
+
+    $default  reduce using rule 16 (Ds)
+
+
+State 99
+
+   17 Cs: Dc ID INIPA . Pa ENDPA
+   18   | Dc ID INIPA . ENDPA
+
+    TYPEVAR  shift, and go to state 24
+    ENDPA    shift, and go to state 120
+    LIST     shift, and go to state 27
+
+    Dc  go to state 121
+    Pa  go to state 122
+
+
+State 100
+
+   42 Exp: Exp . ADDITION Exp
+   42    | Exp ADDITION Exp .
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 42 (Exp)
+
+
+State 101
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   44    | Exp MINMIN Exp .
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ATSIGN  shift, and go to state 74
+
+    $default  reduce using rule 44 (Exp)
+
+
+State 102
+
+   52 Exp: Exp PLUSPLUS CONSTANT . ATSIGN Exp
+
+    ATSIGN  shift, and go to state 123
+
+
+State 103
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   43    | Exp ATSIGN Exp .
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ATSIGN  shift, and go to state 74
+
+    $default  reduce using rule 43 (Exp)
+
+
+State 104
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   51    | Exp CONCATENATE Exp .
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    ORLOG     shift, and go to state 76
+    ANDLOG    shift, and go to state 77
+    EXOR      shift, and go to state 78
+    EQUALS    shift, and go to state 79
+    COMPAR    shift, and go to state 80
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 51 (Exp)
+
+
+State 105
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   47    | Exp ORLOG Exp .
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    ANDLOG    shift, and go to state 77
+    EXOR      shift, and go to state 78
+    EQUALS    shift, and go to state 79
+    COMPAR    shift, and go to state 80
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 47 (Exp)
+
+
+State 106
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   48    | Exp ANDLOG Exp .
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    EXOR      shift, and go to state 78
+    EQUALS    shift, and go to state 79
+    COMPAR    shift, and go to state 80
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 48 (Exp)
+
+
+State 107
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   49    | Exp EXOR Exp .
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    EQUALS    shift, and go to state 79
+    COMPAR    shift, and go to state 80
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 49 (Exp)
+
+
+State 108
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   46    | Exp EQUALS Exp .
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    COMPAR    shift, and go to state 80
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 46 (Exp)
+
+
+State 109
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   45    | Exp COMPAR Exp .
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION  shift, and go to state 71
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+    MULTI     shift, and go to state 81
+
+    $default  reduce using rule 45 (Exp)
+
+
+State 110
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   50    | Exp MULTI Exp .
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    MINMIN    shift, and go to state 72
+    PLUSPLUS  shift, and go to state 73
+    ATSIGN    shift, and go to state 74
+
+    $default  reduce using rule 50 (Exp)
+
+
+State 111
+
+   53 Exp: ID INIPA Lec ENDPA .
+
+    $default  reduce using rule 53 (Exp)
+
+
+State 112
+
+   27 Se: ID ASIGN Exp SEMICOLON .
+
+    $default  reduce using rule 27 (Se)
+
+
+State 113
+
+   28 Se: IF INIPA Exp ENDPA . Se
+   29   | IF INIPA Exp ENDPA . Se ELSE Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    B    go to state 36
+    Se   go to state 124
+    Exp  go to state 42
+
+
+State 114
+
+   31 Se: FOR ID ASIGN Exp . ITEFOR Exp DO Se
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    ITEFOR       shift, and go to state 125
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+
+State 115
+
+   30 Se: WHILE INIPA Exp ENDPA . Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    B    go to state 36
+    Se   go to state 126
+    Exp  go to state 42
+
+
+State 116
+
+   10 Lv: Lv . COMMA ID
+   37 Lvread: WORD COMMA Lv .
+
+    COMMA  shift, and go to state 44
+
+    $default  reduce using rule 37 (Lvread)
+
+
+State 117
+
+   61 Lec: Lec COMMA WORD .
+
+    $default  reduce using rule 61 (Lec)
+
+
+State 118
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   60 Lec: Lec COMMA Exp .
+
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
+
+    $default  reduce using rule 60 (Lec)
+
+
+State 119
+
+   58 lc: lc COMMA CONSTANT .
+
+    $default  reduce using rule 58 (lc)
+
+
+State 120
+
+   18 Cs: Dc ID INIPA ENDPA .
+
+    $default  reduce using rule 18 (Cs)
+
+
+State 121
+
+   23 Pa: Dc . ID
+
+    ID  shift, and go to state 127
+
+
+State 122
+
+   17 Cs: Dc ID INIPA Pa . ENDPA
+   22 Pa: Pa . COMMA Dc ID
+
+    COMMA  shift, and go to state 128
+    ENDPA  shift, and go to state 129
+
+
+State 123
+
+   52 Exp: Exp PLUSPLUS CONSTANT ATSIGN . Exp
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 130
+
+
+State 124
+
+   28 Se: IF INIPA Exp ENDPA Se .
+   29   | IF INIPA Exp ENDPA Se . ELSE Se
+
+    ELSE  shift, and go to state 131
+
+    ELSE      [reduce using rule 28 (Se)]
+    $default  reduce using rule 28 (Se)
+
+
+State 125
+
+   31 Se: FOR ID ASIGN Exp ITEFOR . Exp DO Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    ID        shift, and go to state 47
+    INIPA     shift, and go to state 26
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    Exp  go to state 132
+
+
+State 126
+
+   30 Se: WHILE INIPA Exp ENDPA Se .
+
+    $default  reduce using rule 30 (Se)
+
+
+State 127
+
+   23 Pa: Dc ID .
+
+    $default  reduce using rule 23 (Pa)
+
+
+State 128
+
+   22 Pa: Pa COMMA . Dc ID
+
+    TYPEVAR  shift, and go to state 24
+    LIST     shift, and go to state 27
+
+    Dc  go to state 133
+
+
+State 129
+
+   17 Cs: Dc ID INIPA Pa ENDPA .
+
+    $default  reduce using rule 17 (Cs)
+
+
+State 130
+
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   52    | Exp PLUSPLUS CONSTANT ATSIGN Exp .
+
+    ATSIGN  shift, and go to state 74
+
+    $default  reduce using rule 52 (Exp)
+
+
+State 131
+
+   29 Se: IF INIPA Exp ENDPA Se ELSE . Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    B    go to state 36
+    Se   go to state 134
+    Exp  go to state 42
+
+
 State 132
 
-   28 Se: FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO . Se
+   31 Se: FOR ID ASIGN Exp ITEFOR Exp . DO Se
+   42 Exp: Exp . ADDITION Exp
+   43    | Exp . ATSIGN Exp
+   44    | Exp . MINMIN Exp
+   45    | Exp . COMPAR Exp
+   46    | Exp . EQUALS Exp
+   47    | Exp . ORLOG Exp
+   48    | Exp . ANDLOG Exp
+   49    | Exp . EXOR Exp
+   50    | Exp . MULTI Exp
+   51    | Exp . CONCATENATE Exp
+   52    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
 
-    UNARI      shift, and go to state 20
-    ADDITION   shift, and go to state 21
-    LISTOP2    shift, and go to state 22
-    MINMIN     shift, and go to state 23
-    PLUSPLUS   shift, and go to state 24
-    INIBLO     shift, and go to state 3
-    ID         shift, and go to state 26
-    INIPA      shift, and go to state 27
-    IF         shift, and go to state 29
-    FOR        shift, and go to state 30
-    WHILE      shift, and go to state 31
-    CONST_INT  shift, and go to state 32
-    READ       shift, and go to state 33
-    PRINT      shift, and go to state 34
-    RETURN     shift, and go to state 35
-    CONSTANT   shift, and go to state 36
-    INISQR     shift, and go to state 37
-
-    B      go to state 38
-    Se     go to state 134
-    Exp    go to state 44
-    Const  go to state 45
+    ADDITION     shift, and go to state 71
+    MINMIN       shift, and go to state 72
+    PLUSPLUS     shift, and go to state 73
+    ATSIGN       shift, and go to state 74
+    DO           shift, and go to state 135
+    CONCATENATE  shift, and go to state 75
+    ORLOG        shift, and go to state 76
+    ANDLOG       shift, and go to state 77
+    EXOR         shift, and go to state 78
+    EQUALS       shift, and go to state 79
+    COMPAR       shift, and go to state 80
+    MULTI        shift, and go to state 81
 
 
 State 133
 
-   19 Pa: Pa COMMA Dc ID .
+   22 Pa: Pa COMMA Dc . ID
 
-    $default  reduce using rule 19 (Pa)
+    ID  shift, and go to state 136
 
 
 State 134
 
-   28 Se: FOR ID ASIGN CONST_INT ITEFOR CONST_INT DO Se .
+   29 Se: IF INIPA Exp ENDPA Se ELSE Se .
 
-    $default  reduce using rule 28 (Se)
+    $default  reduce using rule 29 (Se)
+
+
+State 135
+
+   31 Se: FOR ID ASIGN Exp ITEFOR Exp DO . Se
+
+    error     shift, and go to state 46
+    UNARI     shift, and go to state 21
+    ADDITION  shift, and go to state 22
+    LISTOP2   shift, and go to state 23
+    INIBLO    shift, and go to state 3
+    ID        shift, and go to state 25
+    INIPA     shift, and go to state 26
+    IF        shift, and go to state 28
+    FOR       shift, and go to state 29
+    WHILE     shift, and go to state 30
+    READ      shift, and go to state 31
+    PRINT     shift, and go to state 32
+    RETURN    shift, and go to state 33
+    CONSTANT  shift, and go to state 34
+    INISQR    shift, and go to state 35
+
+    B    go to state 36
+    Se   go to state 137
+    Exp  go to state 42
+
+
+State 136
+
+   22 Pa: Pa COMMA Dc ID .
+
+    $default  reduce using rule 22 (Pa)
+
+
+State 137
+
+   31 Se: FOR ID ASIGN Exp ITEFOR Exp DO Se .
+
+    $default  reduce using rule 31 (Se)

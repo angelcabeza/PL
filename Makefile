@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: prueba
+all: clean prueba
 
 prueba: main.o y.tab.o
 	g++ -g -o $@ $^

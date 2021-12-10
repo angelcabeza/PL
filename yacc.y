@@ -142,6 +142,7 @@ Vl  : Vl Cdv
 
 Cdv : TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
     | LIST TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
+    | error
 ;
 
 Lv  : Lv COMMA ID { TS_insertaID($3); $$.lexema = $1.lexema + ", " + $3.lexema;}

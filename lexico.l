@@ -75,7 +75,7 @@ id ([a-zA-Z]+{digit}*)+(_([a-zA-Z]*{digit}*)+)*
 "@" return ATSIGN; 
 {word}                                                  yylval.lexema = string(strdup(yytext)); yylval.lexema = yylval.lexema.substr(1, yylval.lexema.size()-2); return WORD;
 {id}                                                    yylval.lexema = string(strdup(yytext)); return ID;
-[\n\r\t ] ECHO;
-. printf("\n\n \tERROR LEXICO: la palabra %s en la linea %d \n\n\t",yytext,yylineno);
+[\n\r\t ]
+. printf("\nERROR LEXICO: la palabra %s en la linea %d",yytext,yylineno);
 
 %%

@@ -127,14 +127,24 @@
     dtipo comprobarOpBinarioMenos(atributos izq, atributos der);
     dtipo comprobarEsEnteroReal (atributos atrib);
     dtipo comprobarOpUnarios( atributos atrib );
-    void comprobarAdicion (atributos atr1, atributos atr2);
+    bool comprobarAdicionUn (atributos atr1);
+    bool comprobarAdicion (atributos atr1, atributos atr2);
+    bool comprobarBinopListaInt (atributos atr1, atributos atr2);
+    bool comprobarCompar (atributos atr1, atributos atr2);
+    bool comprobarEquals (atributos atr1, atributos atr2);
+    bool comprobarLogOp (atributos atr1, atributos atr2);
+    bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi);
+    bool comprobarConcatLista (atributos atr1, atributos atr2);
+    bool comprobarTernario (atributos atr1, atributos atr2, atributos atr3);
+
+    void printErrorOperador (atributos atr1, atributos atr2, string operador);
 
     string tipo_to_string(dtipo tipo);
     int incrementarTOPE();
     dtipo atrATipo(int atributo);
 
 
-#line 138 "y.tab.c" /* yacc.c:339  */
+#line 148 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -228,7 +238,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 232 "y.tab.c" /* yacc.c:358  */
+#line 242 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -529,13 +539,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   129,   129,   132,   132,   135,   136,   139,   140,   143,
-     144,   145,   148,   149,   150,   153,   154,   157,   157,   160,
-     161,   162,   165,   166,   169,   170,   173,   174,   177,   178,
-     179,   180,   181,   182,   183,   184,   185,   186,   187,   190,
-     191,   193,   194,   195,   196,   197,   198,   199,   200,   201,
-     202,   203,   204,   205,   206,   207,   208,   209,   210,   211,
-     215,   216,   219,   220,   221,   222,   223
+       0,   139,   139,   142,   142,   145,   146,   149,   150,   153,
+     154,   155,   158,   159,   160,   163,   164,   167,   167,   170,
+     171,   172,   175,   176,   179,   180,   183,   184,   187,   188,
+     189,   190,   191,   192,   193,   194,   195,   196,   197,   200,
+     201,   203,   204,   205,   206,   207,   208,   209,   210,   211,
+     212,   213,   214,   215,   216,   217,   218,   219,   220,   221,
+     225,   226,   229,   230,   231,   232,   233
 };
 #endif
 
@@ -1444,217 +1454,277 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 132 "yacc.y" /* yacc.c:1646  */
+#line 142 "yacc.y" /* yacc.c:1646  */
     {TS_insertaMarca();}
-#line 1450 "y.tab.c" /* yacc.c:1646  */
+#line 1460 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 132 "yacc.y" /* yacc.c:1646  */
+#line 142 "yacc.y" /* yacc.c:1646  */
     {TS_vaciarEntradas();}
-#line 1456 "y.tab.c" /* yacc.c:1646  */
+#line 1466 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 143 "yacc.y" /* yacc.c:1646  */
+#line 153 "yacc.y" /* yacc.c:1646  */
     { tipoTmp = atrATipo((yyvsp[-2]).atrib); listaTmp=false; }
-#line 1462 "y.tab.c" /* yacc.c:1646  */
+#line 1472 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 144 "yacc.y" /* yacc.c:1646  */
+#line 154 "yacc.y" /* yacc.c:1646  */
     { tipoTmp = atrATipo((yyvsp[-2]).atrib); listaTmp=true; }
-#line 1468 "y.tab.c" /* yacc.c:1646  */
+#line 1478 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 148 "yacc.y" /* yacc.c:1646  */
+#line 158 "yacc.y" /* yacc.c:1646  */
     { TS_insertaID((yyvsp[0])); (yyval).lexema = (yyvsp[-2]).lexema + ", " + (yyvsp[0]).lexema;}
-#line 1474 "y.tab.c" /* yacc.c:1646  */
+#line 1484 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 149 "yacc.y" /* yacc.c:1646  */
+#line 159 "yacc.y" /* yacc.c:1646  */
     { TS_insertaID((yyvsp[0])); (yyval).lexema = (yyvsp[0]).lexema; }
-#line 1480 "y.tab.c" /* yacc.c:1646  */
+#line 1490 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 157 "yacc.y" /* yacc.c:1646  */
+#line 167 "yacc.y" /* yacc.c:1646  */
     {subprog += 1;}
-#line 1486 "y.tab.c" /* yacc.c:1646  */
+#line 1496 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 157 "yacc.y" /* yacc.c:1646  */
+#line 167 "yacc.y" /* yacc.c:1646  */
     {subprog -= 1;}
-#line 1492 "y.tab.c" /* yacc.c:1646  */
+#line 1502 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 160 "yacc.y" /* yacc.c:1646  */
+#line 170 "yacc.y" /* yacc.c:1646  */
     {TS_InsertaSubprog((yyvsp[-3]));}
-#line 1498 "y.tab.c" /* yacc.c:1646  */
+#line 1508 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 161 "yacc.y" /* yacc.c:1646  */
+#line 171 "yacc.y" /* yacc.c:1646  */
     {TS_InsertaSubprog(atribvacio);}
-#line 1504 "y.tab.c" /* yacc.c:1646  */
+#line 1514 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 165 "yacc.y" /* yacc.c:1646  */
+#line 175 "yacc.y" /* yacc.c:1646  */
     { tipoTmp = atrATipo((yyvsp[0]).atrib); listaTmp=true; }
-#line 1510 "y.tab.c" /* yacc.c:1646  */
+#line 1520 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 166 "yacc.y" /* yacc.c:1646  */
+#line 176 "yacc.y" /* yacc.c:1646  */
     { tipoTmp = atrATipo((yyvsp[0]).atrib); listaTmp=false; }
-#line 1516 "y.tab.c" /* yacc.c:1646  */
+#line 1526 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 169 "yacc.y" /* yacc.c:1646  */
+#line 179 "yacc.y" /* yacc.c:1646  */
     { TS_InsertaParam((yyvsp[0])); }
-#line 1522 "y.tab.c" /* yacc.c:1646  */
+#line 1532 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 170 "yacc.y" /* yacc.c:1646  */
+#line 180 "yacc.y" /* yacc.c:1646  */
     { TS_InsertaParam((yyvsp[0])); }
-#line 1528 "y.tab.c" /* yacc.c:1646  */
+#line 1538 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 178 "yacc.y" /* yacc.c:1646  */
+#line 188 "yacc.y" /* yacc.c:1646  */
     { comprobarEsTipo((yyvsp[-3]).tipo, (yyvsp[-1]).tipo); comprobarAsignacionListas((yyvsp[-3]), (yyvsp[-1])); (yyval).lexema = (yyvsp[-3]).lexema;}
-#line 1534 "y.tab.c" /* yacc.c:1646  */
+#line 1544 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 179 "yacc.y" /* yacc.c:1646  */
+#line 189 "yacc.y" /* yacc.c:1646  */
     {comprobarEsTipo(booleano, (yyvsp[-2]).tipo);}
-#line 1540 "y.tab.c" /* yacc.c:1646  */
+#line 1550 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 180 "yacc.y" /* yacc.c:1646  */
+#line 190 "yacc.y" /* yacc.c:1646  */
     {comprobarEsTipo(booleano, (yyvsp[-4]).tipo);}
-#line 1546 "y.tab.c" /* yacc.c:1646  */
+#line 1556 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 181 "yacc.y" /* yacc.c:1646  */
+#line 191 "yacc.y" /* yacc.c:1646  */
     {comprobarEsTipo(booleano, (yyvsp[-2]).tipo);}
-#line 1552 "y.tab.c" /* yacc.c:1646  */
+#line 1562 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 182 "yacc.y" /* yacc.c:1646  */
+#line 192 "yacc.y" /* yacc.c:1646  */
     {comprobarEsTipo(entero,(yyvsp[-6]).tipo);comprobarEsTipo(entero, (yyvsp[-4]).tipo); comprobarEsTipo(entero,(yyvsp[-2]).tipo);}
-#line 1558 "y.tab.c" /* yacc.c:1646  */
+#line 1568 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 185 "yacc.y" /* yacc.c:1646  */
+#line 195 "yacc.y" /* yacc.c:1646  */
     {comprobarDevuelveSubprog((yyvsp[-1]));}
-#line 1564 "y.tab.c" /* yacc.c:1646  */
+#line 1574 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 186 "yacc.y" /* yacc.c:1646  */
+#line 196 "yacc.y" /* yacc.c:1646  */
     { comprobarEsLista((yyvsp[-1]));}
-#line 1570 "y.tab.c" /* yacc.c:1646  */
+#line 1580 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 187 "yacc.y" /* yacc.c:1646  */
+#line 197 "yacc.y" /* yacc.c:1646  */
     { comprobarEsLista((yyvsp[0]));}
-#line 1576 "y.tab.c" /* yacc.c:1646  */
+#line 1586 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 193 "yacc.y" /* yacc.c:1646  */
+#line 203 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = (yyvsp[-1]).tipo; (yyval).lista = (yyvsp[-1]).lista; (yyval).lexema = "( " + (yyvsp[-1]).lexema + " )";}
-#line 1582 "y.tab.c" /* yacc.c:1646  */
+#line 1592 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 43:
+#line 205 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarAdicionUn((yyvsp[0])); (yyval).tipo=(yyvsp[0]).tipo; }
+#line 1598 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 196 "yacc.y" /* yacc.c:1646  */
-    { comprobarAdicion((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo, (yyval).lista=(yyvsp[-2]).lista; }
-#line 1588 "y.tab.c" /* yacc.c:1646  */
+#line 206 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarAdicion((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1604 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 197 "yacc.y" /* yacc.c:1646  */
-    {  (yyval).tipo=(yyvsp[-2]).tipo, (yyval).lista=0; }
-#line 1594 "y.tab.c" /* yacc.c:1646  */
+#line 207 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarBinopListaInt((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1610 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 208 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarBinopListaInt((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1616 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 209 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarCompar((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1622 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 48:
+#line 210 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarEquals((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=booleano; }
+#line 1628 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 211 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarLogOp((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=booleano; }
+#line 1634 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 212 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarLogOp((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=booleano; }
+#line 1640 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 51:
+#line 213 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarLogOp((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=booleano; }
+#line 1646 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 214 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarMulti((yyvsp[-2]),(yyvsp[0]),(yyvsp[-1]).atrib); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1652 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 215 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarConcatLista((yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-2]).tipo; }
+#line 1658 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 216 "yacc.y" /* yacc.c:1646  */
+    { (yyval).lista=comprobarTernario((yyvsp[-4]),(yyvsp[-2]),(yyvsp[0])); (yyval).tipo=(yyvsp[-4]).tipo; }
+#line 1664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 207 "yacc.y" /* yacc.c:1646  */
+#line 217 "yacc.y" /* yacc.c:1646  */
     { (yyval).tipo =  comprobar_llamada_a_funcion((yyvsp[-3])); (yyval).lexema = (yyvsp[-3]).lexema + "( " + (yyvsp[-1]).lexema + " )"; }
-#line 1600 "y.tab.c" /* yacc.c:1646  */
+#line 1670 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 208 "yacc.y" /* yacc.c:1646  */
+#line 218 "yacc.y" /* yacc.c:1646  */
     {entradaTS ent = encontrarEntrada((yyvsp[0]).lexema, true); (yyval).tipo = ent.tipoDato; (yyval).lista = ent.eslista; (yyval).lexema = (yyvsp[0]).lexema;}
-#line 1606 "y.tab.c" /* yacc.c:1646  */
+#line 1676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 209 "yacc.y" /* yacc.c:1646  */
+#line 219 "yacc.y" /* yacc.c:1646  */
     {tipoTmp = (yyvsp[0]).tipo; (yyval).tipo = (yyvsp[0]).tipo; (yyval).lista = false; (yyval).lexema = (yyvsp[0]).lexema;}
-#line 1612 "y.tab.c" /* yacc.c:1646  */
+#line 1682 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 210 "yacc.y" /* yacc.c:1646  */
+#line 220 "yacc.y" /* yacc.c:1646  */
     {tipoTmp = (yyvsp[-1]).tipo; (yyval).tipo = (yyvsp[-1]).tipo; (yyval).lista = true;}
-#line 1618 "y.tab.c" /* yacc.c:1646  */
+#line 1688 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 215 "yacc.y" /* yacc.c:1646  */
+#line 225 "yacc.y" /* yacc.c:1646  */
     {comprobarEsTipo((yyvsp[0]).tipo, (yyvsp[-2]).tipo); (yyval).tipo = (yyvsp[-2]).tipo;}
-#line 1624 "y.tab.c" /* yacc.c:1646  */
+#line 1694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 216 "yacc.y" /* yacc.c:1646  */
+#line 226 "yacc.y" /* yacc.c:1646  */
     {(yyval).tipo = (yyvsp[0]).tipo;}
-#line 1630 "y.tab.c" /* yacc.c:1646  */
+#line 1700 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 219 "yacc.y" /* yacc.c:1646  */
+#line 229 "yacc.y" /* yacc.c:1646  */
     { TS_subprog_inserta((yyvsp[0])); (yyval).lexema = (yyvsp[-2]).lexema + ", " + (yyvsp[0]).lexema;}
-#line 1636 "y.tab.c" /* yacc.c:1646  */
+#line 1706 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 220 "yacc.y" /* yacc.c:1646  */
+#line 230 "yacc.y" /* yacc.c:1646  */
     { TS_subprog_inserta((yyvsp[0])); (yyval).lexema = (yyvsp[-2]).lexema + ", " + (yyvsp[0]).lexema;}
-#line 1642 "y.tab.c" /* yacc.c:1646  */
+#line 1712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 221 "yacc.y" /* yacc.c:1646  */
+#line 231 "yacc.y" /* yacc.c:1646  */
     { TS_subprog_inserta((yyvsp[0])); (yyval).lexema = (yyvsp[0]).lexema; }
-#line 1648 "y.tab.c" /* yacc.c:1646  */
+#line 1718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 222 "yacc.y" /* yacc.c:1646  */
+#line 232 "yacc.y" /* yacc.c:1646  */
     { TS_subprog_inserta((yyvsp[0])); (yyval).lexema = (yyvsp[0]).lexema;}
-#line 1654 "y.tab.c" /* yacc.c:1646  */
+#line 1724 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1658 "y.tab.c" /* yacc.c:1646  */
+#line 1728 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1882,7 +1952,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 225 "yacc.y" /* yacc.c:1906  */
+#line 235 "yacc.y" /* yacc.c:1906  */
 
 
 #include "lex.yy.c"
@@ -2367,40 +2437,153 @@ dtipo comprobarEsEnteroReal (atributos atrib){
     return atrib.tipo;
 }
 
-void comprobarAdicion (atributos atr1, atributos atr2){
+
+bool comprobarAdicionUn (atributos atr1){
+    if ( (atr1.tipo != entero && atr1.tipo != real) ||
+         (atr1.lista == true) ) {
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);
+        if (atr1.lista){
+            tipo_atr1 = "Lista " + tipo_atr1;
+        }
+
+        printf("Error semantico en la linea %d: Operador adicion unaria error %s\n", yylineno, tipo_atr1.c_str());
+    }
+
+    return false;
+}
+
+
+bool comprobarAdicion (atributos atr1, atributos atr2){
+    bool lista_retorno = atr1.lista != atr2.lista;
+
     if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
-         (atr1.tipo != entero && atr2.tipo != real ) || (atr1.lista != atr2.lista) ) {
+         (atr1.lista == atr2.lista && atr1.lista == true) ) {
+        printErrorOperador(atr1, atr2, "Adicion binaria");
+    }
 
-        string tipo_atr1 = tipoDatoToString(atr1.tipo);;
-        string tipo_atr2 = tipoDatoToString(atr2.tipo);;
+    return lista_retorno;
+}
+
+bool comprobarBinopListaInt (atributos atr1, atributos atr2){
+    if ( (atr2.tipo != entero) || (atr1.lista == false) ||
+         (atr2.lista == true) ) {
+
+        printErrorOperador(atr1, atr2, "binario lista con entero");
+    }
+
+    return false;
+}
+
+
+bool comprobarCompar (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+         (atr1.lista == true) || (atr2.lista == true) ) {
+
+        printErrorOperador(atr1, atr2, "de comparacion");
+    }
+
+    return false;
+}
+
+
+bool comprobarEquals (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) || (atr1.lista == true) ||
+         (atr2.lista == true) ) {
+
+        printErrorOperador(atr1, atr2, "Igual");
+    }
+
+    return false;
+}
+
+
+bool comprobarLogOp (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != booleano) || 
+         (atr1.lista == true) || (atr2.lista == true) ) {
+
+        printErrorOperador(atr1, atr2, "logico");
+    }
+
+    return false;
+}
+
+
+bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi){
+    // atr_multi: 12 *    13 /    14 %
+    bool lista_retorno = false;
+
+    if (atr_multi == 12){
+        if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+             (atr1.lista == true && atr2.lista == true) ){
+                printErrorOperador(atr1, atr2, "Multiplicacion");
+        }
+        lista_retorno = atr1.lista != atr2.lista;
+    }
+    else if (atr_multi == 13){
+        if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+             (atr2.lista == true) ){
+                printErrorOperador(atr1, atr2, "Division");
+        }
+        lista_retorno = atr1.lista != atr2.lista;
+    }
+    else if (atr_multi == 14){
+        if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+             (atr1.lista == true) || (atr2.lista == true) ){
+                printErrorOperador(atr1, atr2, "Modulo");
+        }
+    }
+
+    return lista_retorno;
+}
+
+
+bool comprobarConcatLista (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) ||
+         (atr1.lista == false) || (atr2.lista == false) ){
+            printErrorOperador(atr1, atr2, "Concatenacion de lista");
+    }
+
+    return true;
+}
+
+
+bool comprobarTernario (atributos atr1, atributos atr2, atributos atr3){
+    if ( (atr1.tipo != atr2.tipo) ||
+         (atr1.lista == false) || (atr2.lista == true) || (atr3.lista == true) ||
+         (atr3.tipo != entero) ){
+
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);
+        string tipo_atr2 = tipoDatoToString(atr2.tipo);
+        string tipo_atr3 = tipoDatoToString(atr3.tipo);
         if (atr1.lista){
             tipo_atr1 = "Lista " + tipo_atr1;
         }
         if (atr2.lista){
             tipo_atr2 = "Lista " + tipo_atr2;
         }
-
-        printf("Error semantico en la linea %d: Operador solo aplicable a variables del mismo tipo, encontrados tipos diferentes %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str());
-    }
-}
-
-void comprobarAtsign (atributos atr1, atributos atr2){
-    if ( (atr2.tipo != entero) || (atr1.lista == 0) ||
-         (atr2.lista == 1) ) {
-
-        string tipo_atr1 = tipoDatoToString(atr1.tipo);;
-        string tipo_atr2 = tipoDatoToString(atr2.tipo);;
-        if (atr1.lista){
-            tipo_atr1 = "Lista " + tipo_atr1;
-        }
-        if (atr2.lista){
-            tipo_atr2 = "Lista " + tipo_atr2;
+        if (atr3.lista){
+            tipo_atr3 = "Lista " + tipo_atr3;
         }
 
-        printf("Error semantico en la linea %d: Operador solo aplicable a variables del mismo tipo, encontrados tipos diferentes %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str());
+        printf("Error semantico en la linea %d: Operador ternario error -> %s %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str(), tipo_atr3.c_str());
     }
+
+    return true;
 }
 
+
+void printErrorOperador(atributos atr1, atributos atr2, string operador){
+    string tipo_atr1 = tipoDatoToString(atr1.tipo);
+    string tipo_atr2 = tipoDatoToString(atr2.tipo);
+    if (atr1.lista){
+        tipo_atr1 = "Lista " + tipo_atr1;
+    }
+    if (atr2.lista){
+        tipo_atr2 = "Lista " + tipo_atr2;
+    }
+
+    printf("Error semantico en la linea %d: Operador %s error: %s y %s\n", yylineno, operador.c_str(), tipo_atr1.c_str(), tipo_atr2.c_str());
+}
 
 
 dtipo comprobarOpUnarios( atributos exp ){

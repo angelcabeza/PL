@@ -62,12 +62,17 @@
     dtipo comprobarOpBinarioMenos(atributos izq, atributos der);
     dtipo comprobarEsEnteroReal (atributos atrib);
     dtipo comprobarOpUnarios( atributos atrib );
+    bool comprobarAdicionUn (atributos atr1);
     bool comprobarAdicion (atributos atr1, atributos atr2);
     bool comprobarBinopListaInt (atributos atr1, atributos atr2);
     bool comprobarCompar (atributos atr1, atributos atr2);
     bool comprobarEquals (atributos atr1, atributos atr2);
     bool comprobarLogOp (atributos atr1, atributos atr2);
     bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi);
+    bool comprobarConcatLista (atributos atr1, atributos atr2);
+    bool comprobarTernario (atributos atr1, atributos atr2, atributos atr3);
+
+    void printErrorOperador (atributos atr1, atributos atr2, string operador);
 
     string tipo_to_string(dtipo tipo);
     int incrementarTOPE();
@@ -197,7 +202,7 @@ Lvread  : WORD COMMA Lv
 
 Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " + $2.lexema + " )";}
     | UNARI Exp 
-    | ADDITION Exp %prec UNARI
+    | ADDITION Exp %prec UNARI { $$.lista=comprobarAdicionUn($2); $$.tipo=$2.tipo; }
     | Exp ADDITION Exp { $$.lista=comprobarAdicion($1,$3); $$.tipo=$1.tipo; }
     | Exp ATSIGN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
     | Exp MINMIN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
@@ -207,8 +212,8 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp ANDLOG Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
     | Exp EXOR Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
     | Exp MULTI Exp { $$.lista=comprobarMulti($1,$3,$2.atrib); $$.tipo=$1.tipo; }
-    | Exp CONCATENATE Exp
-    | Exp PLUSPLUS CONSTANT ATSIGN Exp
+    | Exp CONCATENATE Exp { $$.lista=comprobarConcatLista($1,$3); $$.tipo=$1.tipo; }
+    | Exp PLUSPLUS CONSTANT ATSIGN Exp { $$.lista=comprobarTernario($1,$3,$5); $$.tipo=$1.tipo; }
     | ID INIPA Lec ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; } ;
     | ID {entradaTS ent = encontrarEntrada($1.lexema, true); $$.tipo = ent.tipoDato; $$.lista = ent.eslista; $$.lexema = $1.lexema;}
     | CONSTANT {tipoTmp = $1.tipo; $$.tipo = $1.tipo; $$.lista = false; $$.lexema = $1.lexema;}
@@ -711,12 +716,28 @@ dtipo comprobarEsEnteroReal (atributos atrib){
     return atrib.tipo;
 }
 
+
+bool comprobarAdicionUn (atributos atr1){
+    if ( (atr1.tipo != entero && atr1.tipo != real) ||
+         (atr1.lista == true) ) {
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);
+        if (atr1.lista){
+            tipo_atr1 = "Lista " + tipo_atr1;
+        }
+
+        printf("Error semantico en la linea %d: Operador adicion unaria error %s\n", yylineno, tipo_atr1.c_str());
+    }
+
+    return false;
+}
+
+
 bool comprobarAdicion (atributos atr1, atributos atr2){
     bool lista_retorno = atr1.lista != atr2.lista;
 
     if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
          (atr1.lista == atr2.lista && atr1.lista == true) ) {
-        printErrorOpMismoTipo(atr1, atr2);
+        printErrorOperador(atr1, atr2, "Adicion binaria");
     }
 
     return lista_retorno;
@@ -726,7 +747,7 @@ bool comprobarBinopListaInt (atributos atr1, atributos atr2){
     if ( (atr2.tipo != entero) || (atr1.lista == false) ||
          (atr2.lista == true) ) {
 
-        printErrorOpMismoTipo(atr1, atr2);
+        printErrorOperador(atr1, atr2, "binario lista con entero");
     }
 
     return false;
@@ -737,7 +758,7 @@ bool comprobarCompar (atributos atr1, atributos atr2){
     if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
          (atr1.lista == true) || (atr2.lista == true) ) {
 
-        printErrorOpMismoTipo(atr1, atr2);
+        printErrorOperador(atr1, atr2, "de comparacion");
     }
 
     return false;
@@ -748,7 +769,7 @@ bool comprobarEquals (atributos atr1, atributos atr2){
     if ( (atr1.tipo != atr2.tipo) || (atr1.lista == true) ||
          (atr2.lista == true) ) {
 
-        printErrorOpMismoTipo(atr1, atr2);
+        printErrorOperador(atr1, atr2, "Igual");
     }
 
     return false;
@@ -759,7 +780,7 @@ bool comprobarLogOp (atributos atr1, atributos atr2){
     if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != booleano) || 
          (atr1.lista == true) || (atr2.lista == true) ) {
 
-        printErrorOpMismoTipo(atr1, atr2);
+        printErrorOperador(atr1, atr2, "logico");
     }
 
     return false;
@@ -773,21 +794,21 @@ bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi){
     if (atr_multi == 12){
         if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
              (atr1.lista == true && atr2.lista == true) ){
-                printErrorOpMismoTipo(atr1, atr2);
+                printErrorOperador(atr1, atr2, "Multiplicacion");
         }
         lista_retorno = atr1.lista != atr2.lista;
     }
     else if (atr_multi == 13){
         if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
              (atr2.lista == true) ){
-                printErrorOpMismoTipo(atr1, atr2);
+                printErrorOperador(atr1, atr2, "Division");
         }
         lista_retorno = atr1.lista != atr2.lista;
     }
     else if (atr_multi == 14){
         if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
              (atr1.lista == true) || (atr2.lista == true) ){
-                printErrorOpMismoTipo(atr1, atr2);
+                printErrorOperador(atr1, atr2, "Modulo");
         }
     }
 
@@ -795,9 +816,44 @@ bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi){
 }
 
 
-void printErrorOpMismoTipo(atributos atr1, atributos atr2){
-    string tipo_atr1 = tipoDatoToString(atr1.tipo);;
-    string tipo_atr2 = tipoDatoToString(atr2.tipo);;
+bool comprobarConcatLista (atributos atr1, atributos atr2){
+    if ( (atr1.tipo != atr2.tipo) ||
+         (atr1.lista == false) || (atr2.lista == false) ){
+            printErrorOperador(atr1, atr2, "Concatenacion de lista");
+    }
+
+    return true;
+}
+
+
+bool comprobarTernario (atributos atr1, atributos atr2, atributos atr3){
+    if ( (atr1.tipo != atr2.tipo) ||
+         (atr1.lista == false) || (atr2.lista == true) || (atr3.lista == true) ||
+         (atr3.tipo != entero) ){
+
+        string tipo_atr1 = tipoDatoToString(atr1.tipo);
+        string tipo_atr2 = tipoDatoToString(atr2.tipo);
+        string tipo_atr3 = tipoDatoToString(atr3.tipo);
+        if (atr1.lista){
+            tipo_atr1 = "Lista " + tipo_atr1;
+        }
+        if (atr2.lista){
+            tipo_atr2 = "Lista " + tipo_atr2;
+        }
+        if (atr3.lista){
+            tipo_atr3 = "Lista " + tipo_atr3;
+        }
+
+        printf("Error semantico en la linea %d: Operador ternario error -> %s %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str(), tipo_atr3.c_str());
+    }
+
+    return true;
+}
+
+
+void printErrorOperador(atributos atr1, atributos atr2, string operador){
+    string tipo_atr1 = tipoDatoToString(atr1.tipo);
+    string tipo_atr2 = tipoDatoToString(atr2.tipo);
     if (atr1.lista){
         tipo_atr1 = "Lista " + tipo_atr1;
     }
@@ -805,7 +861,7 @@ void printErrorOpMismoTipo(atributos atr1, atributos atr2){
         tipo_atr2 = "Lista " + tipo_atr2;
     }
 
-    printf("Error semantico en la linea %d: Operador solo aplicable a variables del mismo tipo, encontrados tipos diferentes %s y %s\n", yylineno, tipo_atr1.c_str(), tipo_atr2.c_str());
+    printf("Error semantico en la linea %d: Operador %s error: %s y %s\n", yylineno, operador.c_str(), tipo_atr1.c_str(), tipo_atr2.c_str());
 }
 
 

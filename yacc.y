@@ -51,6 +51,7 @@
     void comprobarAsignacionListas(atributos id, atributos exp);
     void comprobarDevuelveSubprog(atributos atrib);
     string tipoDatoToString(dtipo tipo);
+    void comprobacionLista(bool lista1, bool lista2);
 
     dtipo comprobar_llamada_a_funcion(atributos atrib);
 
@@ -58,10 +59,7 @@
     
 
     //Aparte
-    dtipo comprobarOpBinario(atributos izq, atributos operador, atributos der);
-    dtipo comprobarOpBinarioMenos(atributos izq, atributos der);
     dtipo comprobarEsEnteroReal (atributos atrib);
-    dtipo comprobarOpUnarios( atributos atrib );
     bool comprobarAdicionUn (atributos atr1);
     bool comprobarAdicion (atributos atr1, atributos atr2);
     bool comprobarBinopListaInt (atributos atr1, atributos atr2);
@@ -150,10 +148,12 @@ Vl  : Vl Cdv
     | Cdv
 ;
 
-Cdv : TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
-    | LIST TYPEVAR Lv SEMICOLON { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
+Cdv : tipo Lv SEMICOLON 
     | error
 ;
+
+tipo : TYPEVAR { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
+    | LIST TYPEVAR { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
 
 Lv  : Lv COMMA ID { TS_insertaID($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
     | ID { TS_insertaID($1); $$.lexema = $1.lexema; }
@@ -185,7 +185,9 @@ Ses : Ses Se
 ;
 
 Se  : B 
-    | ID ASIGN Exp SEMICOLON { comprobarEsTipo($1.tipo, $3.tipo); comprobarAsignacionListas($1, $3); $$.lexema = $1.lexema;}
+    //| ID ASIGN Exp SEMICOLON { comprobarEsTipo($1.tipo, $3.tipo); comprobarAsignacionListas($1, $3); $$.lexema = $1.lexema; }
+    | ID ASIGN Exp SEMICOLON { entradaTS ent = encontrarEntrada($1.lexema, true); comprobarEsTipo(ent.tipoDato, $3.tipo);
+                               comprobacionLista(ent.eslista, $3.lista); $$.lexema = $1.lexema; }
     | IF INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
     | IF INIPA Exp ENDPA Se ELSE Se {comprobarEsTipo(booleano, $3.tipo);}
     | WHILE INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
@@ -264,6 +266,8 @@ void TS_insertaID(atributos atributo){
     nueva_entrada.nombre = atributo.lexema;
     nueva_entrada.tipoDato = tipoTmp;
     nueva_entrada.eslista = listaTmp;
+
+    //printf("\nDeclarando %s: tipo %s\n", atributo.lexema.c_str(), tipoDatoToString(tipoTmp).c_str() );
 
     int pos_id_buscado = TOPE -1;
     bool encontrado = false;
@@ -396,13 +400,20 @@ void TS_InsertaParam(atributos atributo){
 
         TOPE_PARAMF++;
 
-        printf("Tipo: '%s'",tipoDatoToString(nueva_entrada.tipoDato).c_str());
+        //printf("Tipo: '%s'",tipoDatoToString(nueva_entrada.tipoDato).c_str());
 
     } else {
         // si existe damos error
         printf("Error semantico en la linea %d: El parámetro %s ya existe\n", yylineno, atributo.lexema.c_str());
     }
 
+}
+
+
+void comprobacionLista(bool lista1, bool lista2){
+    if (lista1 != lista2){
+        printf("Error semantico en la linea %d: Elemento no lista y elemento lista\n", yylineno);
+    }
 }
 
 void TS_subprog_inserta(atributos atrib) {
@@ -627,87 +638,6 @@ void comprobarDevuelveSubprog(atributos atrib) {
 }
 
 
-dtipo comprobarOpBinario(atributos izq, atributos operador, atributos der) {
-
-    dtipo tipo_exp = desconocido;
-
-    string t_izq = tipo_to_string(izq.tipo);
-    string t_der = tipo_to_string(der.tipo);
-
-    // operadores de + * / y relacion
-    if ( (operador.atrib >= 0 && operador.atrib <= 2) ||
-          ( operador.atrib >= 6 && operador.atrib <= 9  )) {
-
-        if ( izq.lista ) {
-            if ( der.lista ) {
-                printf("Error semantico en la linea %d: No se puede aplicar el operador entre dos listas\n", yylineno);
-            } if ( der.tipo != entero && der.tipo != real) {
-                printf("Error semantico en la linea %d: Operador solo aplicable a enteros o reales, encontrados tipos lista de %s y %s\n", yylineno, t_izq.c_str(), t_der.c_str());
-            }
-
-        } else if ( der.lista ){
-
-             if ( izq.tipo != entero && izq.tipo != real ) {
-                printf("Error semantico en la linea %d: Operador solo aplicable a enteros o reales, encontrados tipos %s y lista de %s\n", yylineno, t_izq.c_str(), t_der.c_str());
-            }
-
-        } else {
-            // tiene que ser entero o real y del mismo tipo
-            if ( (izq.tipo != entero && izq.tipo != real) || (der.tipo != entero && der.tipo != real) ) {
-                printf("Error semantico en la linea %d: Operador solo aplicable a enteros o reales, encontrados tipos %s y %s\n", yylineno, t_izq.c_str(), t_der.c_str());
-            } else {
-                // comprobamos que izq y der son del mismo tipo
-                comprobarEsTipo(izq.tipo, der.tipo);
-            }
-        }
-
-    } else if (operador.atrib == 10 || operador.atrib == 11){
-        // operaciones de comprobar si son iguales o distintos, aplicables a todos los tipos
-        comprobarEsTipo(izq.tipo, der.tipo);
-
-    } else if ( operador.atrib >= 3 && operador.atrib <= 5 ) {
-        if ( izq.tipo != booleano && der.tipo != booleano ){
-            printf("Error semantico en la linea %d: Operador solo aplicable a booleanos, encontrados tipos %s y %s\n", yylineno, t_izq.c_str(), t_der.c_str());
-        } else {
-            // comprobamos que izq y der son del mismo tipo
-            comprobarEsTipo(izq.tipo, der.tipo);
-        }
-
-    // operador l--x l%x
-    } else if ( operador.atrib == 12 || operador.atrib == 13){
-        comprobarEsLista(izq);
-        comprobarEsTipo(entero, der.tipo);
-    } else if ( operador.atrib == 14 ) {
-        comprobarEsLista(izq);
-        comprobarEsLista(der);
-    }
-
-    if ( operador.atrib >= 3 && operador.atrib <= 11 ){
-        tipo_exp = booleano;
-
-    } else {
-        tipo_exp = izq.tipo;
-
-    }
-
-    return tipo_exp;
-
-}
-
-dtipo comprobarOpBinarioMenos(atributos izq, atributos der) {
-    if ( (izq.tipo != entero && izq.tipo != real) || (der.tipo != entero && der.tipo != real) ){
-        string t_izq = tipo_to_string(izq.tipo);
-        string t_der = tipo_to_string(der.tipo);
-        printf("Error semantico en la linea %d: Operador solo aplicable a enteros o reales, encontrados tipos %s y %s\n", yylineno, t_izq.c_str(), t_der.c_str());
-    } else {
-        // comprobamos que izq y der son del mismo tipo
-        comprobarEsTipo(izq.tipo, der.tipo);
-    }
-
-    return izq.tipo;
-
-}
-
 dtipo comprobarEsEnteroReal (atributos atrib){
     if ( atrib.tipo != entero && atrib.tipo != real){
         string t = tipo_to_string(atrib.tipo);
@@ -864,28 +794,6 @@ void printErrorOperador(atributos atr1, atributos atr2, string operador){
     printf("Error semantico en la linea %d: Operador %s error: %s y %s\n", yylineno, operador.c_str(), tipo_atr1.c_str(), tipo_atr2.c_str());
 }
 
-
-dtipo comprobarOpUnarios( atributos exp ){
-
-    entradaTS entrada;
-    dtipo tipo_a_devolver;
-
-    //es_constante
-    entrada = encontrarEntrada(exp.lexema, true);
-
-    // operador !
-    if ( exp.atrib == 0 ) {
-        comprobarEsTipo(booleano, exp.tipo);
-        tipo_a_devolver = booleano;
-    // operador # y ?
-    } else {
-        comprobarEsLista(exp);
-        tipo_a_devolver = exp.tipo;
-    }
-
-    return tipo_a_devolver;
-
-}
 
 string tipoDatoToString(dtipo tipo){
     string datoString = "desconocido";

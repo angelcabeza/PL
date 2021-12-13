@@ -26,7 +26,7 @@ main{
                     x1 = 1.3 ;
                     xf = c1;
                     if (c2 > 10){
-                        c2= c2-1 ;
+                        c2 = c2-1.0 ;
                     }else{
                         x1= 3 ;
                         return x1 ;

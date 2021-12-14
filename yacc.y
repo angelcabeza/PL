@@ -201,8 +201,15 @@ Se  : B
     | LISTOP2 Exp { comprobarEsLista($2);}
 ;
 
-Lvread  : WORD COMMA Lv
-        | Lv
+Lvread  : WORD COMMA Lv2
+        | Lv2
+;
+
+//Este Lv2 es util, porque es para una lista de variables que estan siendo llamadas
+//No se si es la mejor forma de hacerlo, pero la anterior daba errores
+Lv2  : Lv2 COMMA ID {$$.lexema = $1.lexema + ", " + $3.lexema;}
+    | ID {$$.lexema = $1.lexema; }
+    | error
 ;
 
 Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " + $2.lexema + " )";}

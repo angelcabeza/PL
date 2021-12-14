@@ -168,13 +168,17 @@ Dss : Dss Ds
 Ds  : Cs {subprog += 1;} B {subprog -= 1;} ;
 ;
 
-Cs  : Dc ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
-    | Dc ID INIPA ENDPA {TS_InsertaSubprog(atribvacio);}
+Cs  : Dc2 ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
+    | Dc2 ID INIPA ENDPA {TS_InsertaSubprog(atribvacio);}
     | error
 ;
 
 Dc  : LIST TYPEVAR { tipoTmp = atrATipo($2.atrib); listaTmp=true; }
     | TYPEVAR { tipoTmp = atrATipo($1.atrib); listaTmp=false; }
+;
+
+Dc2 : LIST TYPEVAR { tipoSubprog = atrATipo($2.atrib); listaTmp=true; }
+    | TYPEVAR { tipoSubprog = atrATipo($1.atrib); listaTmp=false; }
 ;
 
 Pa  : Pa COMMA Dc ID { TS_InsertaParam($4); };
@@ -218,7 +222,7 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp ADDITION Exp { $$.lista=comprobarAdicion($1,$3); $$.tipo=$1.tipo; }
     | Exp ATSIGN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
     | Exp MINMIN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
-    | Exp COMPAR Exp { $$.lista=comprobarCompar($1,$3); $$.tipo=$1.tipo; }
+    | Exp COMPAR Exp { $$.lista=comprobarCompar($1,$3); $$.tipo=booleano; }
     | Exp EQUALS Exp { $$.lista=comprobarEquals($1,$3); $$.tipo=booleano; }
     | Exp ORLOG Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
     | Exp ANDLOG Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
@@ -358,7 +362,7 @@ void TS_InsertaSubprog(atributos atributo){
         nueva_entrada.entrada = funcion;
         nueva_entrada.nombre = atributo.lexema;
         nueva_entrada.parametros = 0;
-        nueva_entrada.tipoDato = tipoTmp;
+        nueva_entrada.tipoDato = tipoSubprog;
         nueva_entrada.eslista = listaTmp;
         TS[TOPE] = nueva_entrada;
         incrementarTOPE();
@@ -638,9 +642,7 @@ void comprobarDevuelveSubprog(atributos atrib) {
 
 
 
-    if ( entrada == 0 ){
-        printf("Error semantico en la linea %d: No se puede devolver un valor en la seccion principal\n", yylineno);
-    } else {
+    if ( entrada != 0 ){
         comprobarEsTipo(TS[entrada].tipoDato, atrib.tipo);
     }
 

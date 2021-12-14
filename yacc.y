@@ -27,6 +27,7 @@
         string lexema = "";
         bool lista = false;
         dtipo tipo = desconocido;
+        bool constante = false;
     } atributos;
 
     atributos atribvacio;
@@ -202,6 +203,7 @@ Se  : B
 
 Lvread  : WORD COMMA Lv
         | Lv
+;
 
 Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " + $2.lexema + " )";}
     | UNARI Exp 
@@ -217,21 +219,20 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp MULTI Exp { $$.lista=comprobarMulti($1,$3,$2.atrib); $$.tipo=$1.tipo; }
     | Exp CONCATENATE Exp { $$.lista=comprobarConcatLista($1,$3); $$.tipo=$1.tipo; }
     | Exp PLUSPLUS CONSTANT ATSIGN Exp { $$.lista=comprobarTernario($1,$3,$5); $$.tipo=$1.tipo; }
-    | ID INIPA Lec ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; } ;
-    | ID {entradaTS ent = encontrarEntrada($1.lexema, true); $$.tipo = ent.tipoDato; $$.lista = ent.eslista; $$.lexema = $1.lexema;}
-    | CONSTANT {tipoTmp = $1.tipo; $$.tipo = $1.tipo; $$.lista = false; $$.lexema = $1.lexema;}
-    | INISQR lc ENDSQR {tipoTmp = $2.tipo; $$.tipo = $2.tipo; $$.lista = true;}
+    | ID INIPA Lec ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; }
+    | ID {entradaTS ent = encontrarEntrada($1.lexema, true); $$.tipo = ent.tipoDato; $$.lista = ent.eslista; $$.lexema = $1.lexema; }
+    | CONSTANT { tipoTmp = $1.tipo; $$.tipo = $1.tipo; $$.lista = false; $$.lexema = $1.lexema; } //El error tiene que andar por aquí
+    | INISQR lc ENDSQR {tipoTmp = $2.tipo; $$.tipo = $2.tipo; $$.lista = true; }
     | error
 ;
 
-
-lc  : lc COMMA CONSTANT {comprobarEsTipo($3.tipo, $1.tipo); $$.tipo = $1.tipo;}
+lc  : lc COMMA CONSTANT {comprobarEsTipo($3.tipo, $1.tipo); $$.tipo = $1.tipo; }
     | CONSTANT {$$.tipo = $1.tipo;}
 ;
 
 Lec :  Lec COMMA Exp { TS_subprog_inserta($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
     | Lec COMMA WORD { TS_subprog_inserta($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
-    | Exp { TS_subprog_inserta($1); $$.lexema = $1.lexema; }
+    | Exp  { TS_subprog_inserta($1); $$.lexema = $1.lexema; }
     | WORD { TS_subprog_inserta($1); $$.lexema = $1.lexema;}
     |
 ;
@@ -541,12 +542,12 @@ dtipo comprobar_llamada_a_funcion(atributos atrib) {
 
                 parametro_en_TS.tipoDato = TS_llamadas_subprog[num_parametros].tipo;
 
-                // Aqui he quitado el es_constante que se declara a falso y nunca jamas se vuelve a tocar
-                // if ( !TS_llamadas_subprog[num_parametros].es_constante ){
+                
+                if ( !TS_llamadas_subprog[num_parametros].constante ){
                     // buscamos el parametro en la tabla de simbolos
                     // diciendo que es necesario que lo encuentre
                     parametro_en_TS = encontrarEntrada(TS_llamadas_subprog[num_parametros].lexema, true);
-                // }
+                }
 
                 // si el tipo encontrado no es del tipo esperado, sacamos el error
                 // por pantalla

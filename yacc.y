@@ -218,7 +218,7 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp ADDITION Exp { $$.lista=comprobarAdicion($1,$3); $$.tipo=$1.tipo; }
     | Exp ATSIGN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
     | Exp MINMIN Exp { $$.lista=comprobarBinopListaInt($1,$3); $$.tipo=$1.tipo; }
-    | Exp COMPAR Exp { $$.lista=comprobarCompar($1,$3); $$.tipo=$1.tipo; }
+    | Exp COMPAR Exp { $$.lista=comprobarCompar($1,$3); $$.tipo=booleano; }
     | Exp EQUALS Exp { $$.lista=comprobarEquals($1,$3); $$.tipo=booleano; }
     | Exp ORLOG Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
     | Exp ANDLOG Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }

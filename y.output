@@ -82,7 +82,7 @@ Gramática
    56    | Exp EXOR Exp
    57    | Exp MULTI Exp
    58    | Exp CONCATENATE Exp
-   59    | Exp PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp PLUSPLUS Exp ATSIGN Exp
    60    | ID INIPA Lec ENDPA
    61    | ID
    62    | CONSTANT
@@ -131,7 +131,7 @@ Terminales con las reglas donde aparecen
     READ (283) 36
     PRINT (284) 37
     RETURN (285) 38
-    CONSTANT (286) 59 62 65 66
+    CONSTANT (286) 62 65 66
     WORD (287) 41 68 70
     INISQR (288) 63
     ENDSQR (289) 63
@@ -684,7 +684,7 @@ Estado 44
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -744,7 +744,7 @@ Estado 49
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     $default  reduce usando la regla 47 (Exp)
 
@@ -762,7 +762,7 @@ Estado 50
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     $default  reduce usando la regla 48 (Exp)
 
@@ -780,7 +780,7 @@ Estado 51
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
@@ -844,7 +844,7 @@ Estado 54
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -962,7 +962,7 @@ Estado 65
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
    69 Lec: Exp .
 
     ADDITION     desplazar e ir al estado 74
@@ -1003,7 +1003,7 @@ Estado 67
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1098,9 +1098,17 @@ Estado 75
 
 Estado 76
 
-   59 Exp: Exp PLUSPLUS . CONSTANT ATSIGN Exp
+   59 Exp: Exp PLUSPLUS . Exp ATSIGN Exp
 
-    CONSTANT  desplazar e ir al estado 105
+    error     desplazar e ir al estado 47
+    UNARI     desplazar e ir al estado 23
+    ADDITION  desplazar e ir al estado 24
+    ID        desplazar e ir al estado 48
+    INIPA     desplazar e ir al estado 28
+    CONSTANT  desplazar e ir al estado 36
+    INISQR    desplazar e ir al estado 37
+
+    Exp  ir al estado 105
 
 
 Estado 77
@@ -1260,7 +1268,7 @@ Estado 88
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1297,7 +1305,7 @@ Estado 90
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1341,7 +1349,7 @@ Estado 92
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1459,7 +1467,7 @@ Estado 103
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     MULTI  desplazar e ir al estado 84
 
@@ -1479,7 +1487,7 @@ Estado 104
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     ORLOG     desplazar e ir al estado 79
@@ -1494,9 +1502,30 @@ Estado 104
 
 Estado 105
 
-   59 Exp: Exp PLUSPLUS CONSTANT . ATSIGN Exp
+   49 Exp: Exp . ADDITION Exp
+   50    | Exp . ATSIGN Exp
+   51    | Exp . MINMIN Exp
+   52    | Exp . COMPAR Exp
+   53    | Exp . EQUALS Exp
+   54    | Exp . ORLOG Exp
+   55    | Exp . ANDLOG Exp
+   56    | Exp . EXOR Exp
+   57    | Exp . MULTI Exp
+   58    | Exp . CONCATENATE Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
+   59    | Exp PLUSPLUS Exp . ATSIGN Exp
 
-    ATSIGN  desplazar e ir al estado 129
+    ADDITION     desplazar e ir al estado 74
+    MINMIN       desplazar e ir al estado 75
+    PLUSPLUS     desplazar e ir al estado 76
+    ATSIGN       desplazar e ir al estado 129
+    CONCATENATE  desplazar e ir al estado 78
+    ORLOG        desplazar e ir al estado 79
+    ANDLOG       desplazar e ir al estado 80
+    EXOR         desplazar e ir al estado 81
+    EQUALS       desplazar e ir al estado 82
+    COMPAR       desplazar e ir al estado 83
+    MULTI        desplazar e ir al estado 84
 
 
 Estado 106
@@ -1512,7 +1541,7 @@ Estado 106
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1542,7 +1571,7 @@ Estado 107
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
    58    | Exp CONCATENATE Exp .
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     MINMIN    desplazar e ir al estado 75
@@ -1569,7 +1598,7 @@ Estado 108
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     ANDLOG    desplazar e ir al estado 80
@@ -1594,7 +1623,7 @@ Estado 109
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     EXOR      desplazar e ir al estado 81
@@ -1618,7 +1647,7 @@ Estado 110
    56    | Exp EXOR Exp .
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     EQUALS    desplazar e ir al estado 82
@@ -1641,7 +1670,7 @@ Estado 111
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     COMPAR    desplazar e ir al estado 83
@@ -1663,7 +1692,7 @@ Estado 112
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION  desplazar e ir al estado 74
     MULTI     desplazar e ir al estado 84
@@ -1684,7 +1713,7 @@ Estado 113
    57    | Exp . MULTI Exp
    57    | Exp MULTI Exp .
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     $default  reduce usando la regla 57 (Exp)
 
@@ -1742,7 +1771,7 @@ Estado 117
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -1819,7 +1848,7 @@ Estado 122
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
    67 Lec: Lec COMMA Exp .
 
     ADDITION     desplazar e ir al estado 74
@@ -1883,7 +1912,8 @@ Estado 128
 
 Estado 129
 
-   59 Exp: Exp PLUSPLUS CONSTANT ATSIGN . Exp
+   50 Exp: Exp ATSIGN . Exp
+   59    | Exp PLUSPLUS Exp ATSIGN . Exp
 
     error     desplazar e ir al estado 47
     UNARI     desplazar e ir al estado 23
@@ -1964,6 +1994,7 @@ Estado 137
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
+   50    | Exp ATSIGN Exp .
    51    | Exp . MINMIN Exp
    52    | Exp . COMPAR Exp
    53    | Exp . EQUALS Exp
@@ -1972,8 +2003,8 @@ Estado 137
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
-   59    | Exp PLUSPLUS CONSTANT ATSIGN Exp .
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
+   59    | Exp PLUSPLUS Exp ATSIGN Exp .
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
@@ -2028,7 +2059,7 @@ Estado 139
    56    | Exp . EXOR Exp
    57    | Exp . MULTI Exp
    58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS CONSTANT ATSIGN Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75

@@ -229,7 +229,7 @@ Exp : INIPA Exp ENDPA {$$.tipo = $2.tipo; $$.lista = $2.lista; $$.lexema = "( " 
     | Exp EXOR Exp { $$.lista=comprobarLogOp($1,$3); $$.tipo=booleano; }
     | Exp MULTI Exp { $$.lista=comprobarMulti($1,$3,$2.atrib); $$.tipo=$1.tipo; }
     | Exp CONCATENATE Exp { $$.lista=comprobarConcatLista($1,$3); $$.tipo=$1.tipo; }
-    | Exp PLUSPLUS CONSTANT ATSIGN Exp { $$.lista=comprobarTernario($1,$3,$5); $$.tipo=$1.tipo; }
+    | Exp PLUSPLUS Exp ATSIGN Exp { $$.lista=comprobarTernario($1,$3,$5); $$.tipo=$1.tipo; }
     | ID INIPA Lec ENDPA { $$.tipo =  comprobar_llamada_a_funcion($1); $$.lexema = $1.lexema + "( " + $3.lexema + " )"; }
     | ID {entradaTS ent = encontrarEntrada($1.lexema, true); $$.tipo = ent.tipoDato; $$.lista = ent.eslista; $$.lexema = $1.lexema; }
     | CONSTANT { tipoTmp = $1.tipo; $$.tipo = $1.tipo; $$.lista = false; $$.lexema = $1.lexema; } //El error tiene que andar por aquí

@@ -70,14 +70,14 @@ main{
             return d1 ;
         }
 
-        pe++10@1 ;
-        pf++10@1 ;
-        pc=pc++'#'@1 ;
+        pe = pe ++ 10 @ 1 ;
 
-        if (pe@1 == 20) {
-            ve++pe@1@1;
-        } else {
+        if ( pe@2 == 20){
+            ve = pe -- 1 ;
+        } 
+        else {
             pe = pe * 5;
+            pe = pe2 -10;
         }
 
         return 1;

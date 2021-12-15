@@ -196,7 +196,7 @@ Se  : B
     | IF INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
     | IF INIPA Exp ENDPA Se ELSE Se {comprobarEsTipo(booleano, $3.tipo);}
     | WHILE INIPA Exp ENDPA Se {comprobarEsTipo(booleano, $3.tipo);}
-    | FOR ID ASIGN Exp ITEFOR Exp DO Se { entradaTS ent = encontrarEntrada($1.lexema, true); comprobarEsTipo(entero,ent.tipoDato);
+    | FOR ID ASIGN Exp ITEFOR Exp DO Se { entradaTS ent = encontrarEntrada($2.lexema, true); comprobarEsTipo(entero,ent.tipoDato);
                                           comprobarEsTipo(entero, $4.tipo); comprobarEsTipo(entero,$6.tipo);}
     | READ Lvread SEMICOLON 
     | PRINT Lec SEMICOLON 

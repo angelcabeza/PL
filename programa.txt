@@ -16,6 +16,7 @@ main{
         end_local_var
         char funcionB (char b1, bool b2){
             begin_local_var
+                int h1 ;
                 double xf, x2 ;
             end_local_var
             double funcionC (bool c1, int c2){
@@ -31,11 +32,18 @@ main{
                 }
                 return x1 ;
             }
+
             xf= funcionC (true, 10);
             x2= xf*(funcionC(false,1)-funcionC(true,23))/10.0;
             while (x2*funcionC(false,1)-xf<10.0){
                 x2= x2*xf ;
             }
+
+            for h1 = 1 to 10 do {
+                h1 = h1 ;
+            }
+            
+            xf = 5.0;
         }
         double funcionD (double d1){
             begin_local_var
@@ -72,7 +80,7 @@ main{
 
         pe = pe ++ 10 @ 1 ;
 
-        if ( pe@2 == 20){
+        if ( (pe@2) == 20){
             ve = pe -- 1 ;
         } 
         else {
@@ -80,7 +88,6 @@ main{
             pe = pe2 -10;
         }
 
-        return 1;
     }
 
     return 1;

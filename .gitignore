@@ -2,4 +2,4 @@ analizador_lexico
 lex.yy.c
 *.exe
 *.out
-
+prueba

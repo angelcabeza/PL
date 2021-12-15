@@ -27,7 +27,7 @@ main{
                     c2 = c2-1 ;
                 }
                 else{
-                    x1= 30.1 ;
+                    x1= 3.1 ;
                 }
                 return x1 ;
             }
@@ -68,6 +68,16 @@ main{
                 d1= d1/1000.0 ;
             }
             return d1 ;
+        }
+
+        pe++10@1 ;
+        pf++10@1 ;
+        pc=pc++'#'@1 ;
+
+        if (pe@1 == 20) {
+            ve++pe@1@1;
+        } else {
+            pe = pe * 5;
         }
 
         return 1;

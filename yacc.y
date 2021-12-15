@@ -10,6 +10,7 @@
     #include "estructura_datos.h"
     #define MAX_TS 500
 
+    bool devuelveSubproLlamado = false;
     unsigned long int TOPE = 0;
     unsigned long int TOPE_PARAMF = 0;
     int subprog = 0;
@@ -53,6 +54,7 @@
     void comprobarDevuelveSubprog(atributos atrib);
     string tipoDatoToString(dtipo tipo);
     void comprobacionLista(bool lista1, bool lista2);
+    void comprobarHayReturn();
 
     dtipo comprobar_llamada_a_funcion(atributos atrib);
 
@@ -161,11 +163,11 @@ Lv  : Lv COMMA ID { TS_insertaID($3); $$.lexema = $1.lexema + ", " + $3.lexema;}
     | error
 ;
 
-Dss : Dss Ds 
+Dss : Dss Ds
     |
 ;
 
-Ds  : Cs {subprog += 1;} B {subprog -= 1;} ;
+Ds  : Cs {subprog += 1;} B {comprobarHayReturn(); subprog -= 1;} ;
 ;
 
 Cs  : Dc2 ID INIPA Pa ENDPA {TS_InsertaSubprog($2);}
@@ -201,8 +203,8 @@ Se  : B
     | READ Lvread SEMICOLON 
     | PRINT Lec SEMICOLON 
     | RETURN Exp SEMICOLON {comprobarDevuelveSubprog($2);}
-    | Exp LISTOP1 { comprobarEsLista($1);}
-    | LISTOP2 Exp { comprobarEsLista($2);}
+    | Exp LISTOP1 SEMICOLON { comprobarEsLista($1);}
+    | LISTOP2 Exp SEMICOLON { comprobarEsLista($2);}
 ;
 
 Lvread  : WORD COMMA Lv2
@@ -640,7 +642,7 @@ void comprobarDevuelveSubprog(atributos atrib) {
         entrada--;
     }
 
-
+    devuelveSubproLlamado = true;
 
     if ( entrada != 0 ){
         comprobarEsTipo(TS[entrada].tipoDato, atrib.tipo);
@@ -748,9 +750,11 @@ bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi){
     }
     else if (atr_multi == 14){
         if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
-             (atr1.lista == true) || (atr2.lista == true) ){
+            (atr2.lista == true) ){
                 printErrorOperador(atr1, atr2, "Modulo");
         }
+
+        lista_retorno = atr1.lista != atr2.lista;
     }
 
     return lista_retorno;
@@ -822,4 +826,12 @@ string tipoDatoToString(dtipo tipo){
     }
 
     return datoString;
+}
+
+void comprobarHayReturn(){
+    if (devuelveSubproLlamado){
+        devuelveSubproLlamado = false;
+    } else {
+        printf("Error Semantico en la linea %d: Funcion sin return\n",yylineno);
+    }
 }

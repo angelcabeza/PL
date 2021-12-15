@@ -1,4 +1,4 @@
-Estado 130 conflictos: 1 desplazamiento/reducción
+Estado 132 conflictos: 1 desplazamiento/reducción
 
 
 Gramática
@@ -59,8 +59,8 @@ Gramática
    36   | READ Lvread SEMICOLON
    37   | PRINT Lec SEMICOLON
    38   | RETURN Exp SEMICOLON
-   39   | Exp LISTOP1
-   40   | LISTOP2 Exp
+   39   | Exp LISTOP1 SEMICOLON
+   40   | LISTOP2 Exp SEMICOLON
 
    41 Lvread: WORD COMMA Lv2
    42       | Lv2
@@ -115,7 +115,7 @@ Terminales con las reglas donde aparecen
     INIVAR (267) 4
     ENDVAR (268) 4
     TYPEVAR (269) 10 11 22 23 24 25
-    SEMICOLON (270) 8 31 36 37 38
+    SEMICOLON (270) 8 31 36 37 38 39 40
     COMMA (271) 12 26 41 43 65 67 68
     ID (272) 12 13 19 20 26 27 31 35 43 44 60 61
     INIPA (273) 19 20 32 33 34 46 60
@@ -467,7 +467,7 @@ Estado 24
 
 Estado 25
 
-   40 Se: LISTOP2 . Exp
+   40 Se: LISTOP2 . Exp SEMICOLON
 
     error     desplazar e ir al estado 47
     UNARI     desplazar e ir al estado 23
@@ -673,7 +673,7 @@ Estado 43
 
 Estado 44
 
-   39 Se: Exp . LISTOP1
+   39 Se: Exp . LISTOP1 SEMICOLON
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
    51    | Exp . MINMIN Exp
@@ -769,7 +769,7 @@ Estado 50
 
 Estado 51
 
-   40 Se: LISTOP2 Exp .
+   40 Se: LISTOP2 Exp . SEMICOLON
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
    51    | Exp . MINMIN Exp
@@ -782,9 +782,11 @@ Estado 51
    58    | Exp . CONCATENATE Exp
    59    | Exp . PLUSPLUS Exp ATSIGN Exp
 
+    ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
     ATSIGN       desplazar e ir al estado 77
+    SEMICOLON    desplazar e ir al estado 87
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -792,8 +794,6 @@ Estado 51
     EQUALS       desplazar e ir al estado 82
     COMPAR       desplazar e ir al estado 83
     MULTI        desplazar e ir al estado 84
-
-    $default  reduce usando la regla 40 (Se)
 
 
 Estado 52
@@ -813,7 +813,7 @@ Estado 52
     ENDPA  reduce usando la regla 71 (Lec)
 
     Exp  ir al estado 65
-    Lec  ir al estado 87
+    Lec  ir al estado 88
 
 
 Estado 53
@@ -828,7 +828,7 @@ Estado 53
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 88
+    Exp  ir al estado 89
 
 
 Estado 54
@@ -850,7 +850,7 @@ Estado 54
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
     ATSIGN       desplazar e ir al estado 77
-    ENDPA        desplazar e ir al estado 89
+    ENDPA        desplazar e ir al estado 90
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -880,14 +880,14 @@ Estado 56
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 90
+    Exp  ir al estado 91
 
 
 Estado 57
 
    35 Se: FOR ID . ASIGN Exp ITEFOR Exp DO Se
 
-    ASIGN  desplazar e ir al estado 91
+    ASIGN  desplazar e ir al estado 92
 
 
 Estado 58
@@ -902,7 +902,7 @@ Estado 58
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 92
+    Exp  ir al estado 93
 
 
 Estado 59
@@ -923,14 +923,14 @@ Estado 61
 
    41 Lvread: WORD . COMMA Lv2
 
-    COMMA  desplazar e ir al estado 93
+    COMMA  desplazar e ir al estado 94
 
 
 Estado 62
 
    36 Se: READ Lvread . SEMICOLON
 
-    SEMICOLON  desplazar e ir al estado 94
+    SEMICOLON  desplazar e ir al estado 95
 
 
 Estado 63
@@ -938,7 +938,7 @@ Estado 63
    42 Lvread: Lv2 .
    43 Lv2: Lv2 . COMMA ID
 
-    COMMA  desplazar e ir al estado 95
+    COMMA  desplazar e ir al estado 96
 
     $default  reduce usando la regla 42 (Lvread)
 
@@ -986,8 +986,8 @@ Estado 66
    67 Lec: Lec . COMMA Exp
    68    | Lec . COMMA WORD
 
-    SEMICOLON  desplazar e ir al estado 96
-    COMMA      desplazar e ir al estado 97
+    SEMICOLON  desplazar e ir al estado 97
+    COMMA      desplazar e ir al estado 98
 
 
 Estado 67
@@ -1009,7 +1009,7 @@ Estado 67
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
     ATSIGN       desplazar e ir al estado 77
-    SEMICOLON    desplazar e ir al estado 98
+    SEMICOLON    desplazar e ir al estado 99
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -1031,8 +1031,8 @@ Estado 69
    63 Exp: INISQR lc . ENDSQR
    65 lc: lc . COMMA CONSTANT
 
-    COMMA   desplazar e ir al estado 99
-    ENDSQR  desplazar e ir al estado 100
+    COMMA   desplazar e ir al estado 100
+    ENDSQR  desplazar e ir al estado 101
 
 
 Estado 70
@@ -1041,7 +1041,7 @@ Estado 70
 
     INIBLO  desplazar e ir al estado 3
 
-    B  ir al estado 101
+    B  ir al estado 102
 
 
 Estado 71
@@ -1049,7 +1049,7 @@ Estado 71
    19 Cs: Dc2 ID . INIPA Pa ENDPA
    20   | Dc2 ID . INIPA ENDPA
 
-    INIPA  desplazar e ir al estado 102
+    INIPA  desplazar e ir al estado 103
 
 
 Estado 72
@@ -1078,7 +1078,7 @@ Estado 74
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 103
+    Exp  ir al estado 104
 
 
 Estado 75
@@ -1093,7 +1093,7 @@ Estado 75
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 104
+    Exp  ir al estado 105
 
 
 Estado 76
@@ -1108,7 +1108,7 @@ Estado 76
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 105
+    Exp  ir al estado 106
 
 
 Estado 77
@@ -1123,7 +1123,7 @@ Estado 77
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 106
+    Exp  ir al estado 107
 
 
 Estado 78
@@ -1138,7 +1138,7 @@ Estado 78
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 107
+    Exp  ir al estado 108
 
 
 Estado 79
@@ -1153,7 +1153,7 @@ Estado 79
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 108
+    Exp  ir al estado 109
 
 
 Estado 80
@@ -1168,7 +1168,7 @@ Estado 80
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 109
+    Exp  ir al estado 110
 
 
 Estado 81
@@ -1183,7 +1183,7 @@ Estado 81
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 110
+    Exp  ir al estado 111
 
 
 Estado 82
@@ -1198,7 +1198,7 @@ Estado 82
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 111
+    Exp  ir al estado 112
 
 
 Estado 83
@@ -1213,7 +1213,7 @@ Estado 83
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 112
+    Exp  ir al estado 113
 
 
 Estado 84
@@ -1228,14 +1228,14 @@ Estado 84
     CONSTANT  desplazar e ir al estado 36
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 113
+    Exp  ir al estado 114
 
 
 Estado 85
 
-   39 Se: Exp LISTOP1 .
+   39 Se: Exp LISTOP1 . SEMICOLON
 
-    $default  reduce usando la regla 39 (Se)
+    SEMICOLON  desplazar e ir al estado 115
 
 
 Estado 86
@@ -1247,15 +1247,22 @@ Estado 86
 
 Estado 87
 
+   40 Se: LISTOP2 Exp SEMICOLON .
+
+    $default  reduce usando la regla 40 (Se)
+
+
+Estado 88
+
    60 Exp: ID INIPA Lec . ENDPA
    67 Lec: Lec . COMMA Exp
    68    | Lec . COMMA WORD
 
-    COMMA  desplazar e ir al estado 97
-    ENDPA  desplazar e ir al estado 114
+    COMMA  desplazar e ir al estado 98
+    ENDPA  desplazar e ir al estado 116
 
 
-Estado 88
+Estado 89
 
    31 Se: ID ASIGN Exp . SEMICOLON
    49 Exp: Exp . ADDITION Exp
@@ -1274,7 +1281,7 @@ Estado 88
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
     ATSIGN       desplazar e ir al estado 77
-    SEMICOLON    desplazar e ir al estado 115
+    SEMICOLON    desplazar e ir al estado 117
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -1284,61 +1291,17 @@ Estado 88
     MULTI        desplazar e ir al estado 84
 
 
-Estado 89
+Estado 90
 
    46 Exp: INIPA Exp ENDPA .
 
     $default  reduce usando la regla 46 (Exp)
 
 
-Estado 90
+Estado 91
 
    32 Se: IF INIPA Exp . ENDPA Se
    33   | IF INIPA Exp . ENDPA Se ELSE Se
-   49 Exp: Exp . ADDITION Exp
-   50    | Exp . ATSIGN Exp
-   51    | Exp . MINMIN Exp
-   52    | Exp . COMPAR Exp
-   53    | Exp . EQUALS Exp
-   54    | Exp . ORLOG Exp
-   55    | Exp . ANDLOG Exp
-   56    | Exp . EXOR Exp
-   57    | Exp . MULTI Exp
-   58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS Exp ATSIGN Exp
-
-    ADDITION     desplazar e ir al estado 74
-    MINMIN       desplazar e ir al estado 75
-    PLUSPLUS     desplazar e ir al estado 76
-    ATSIGN       desplazar e ir al estado 77
-    ENDPA        desplazar e ir al estado 116
-    CONCATENATE  desplazar e ir al estado 78
-    ORLOG        desplazar e ir al estado 79
-    ANDLOG       desplazar e ir al estado 80
-    EXOR         desplazar e ir al estado 81
-    EQUALS       desplazar e ir al estado 82
-    COMPAR       desplazar e ir al estado 83
-    MULTI        desplazar e ir al estado 84
-
-
-Estado 91
-
-   35 Se: FOR ID ASIGN . Exp ITEFOR Exp DO Se
-
-    error     desplazar e ir al estado 47
-    UNARI     desplazar e ir al estado 23
-    ADDITION  desplazar e ir al estado 24
-    ID        desplazar e ir al estado 48
-    INIPA     desplazar e ir al estado 28
-    CONSTANT  desplazar e ir al estado 36
-    INISQR    desplazar e ir al estado 37
-
-    Exp  ir al estado 117
-
-
-Estado 92
-
-   34 Se: WHILE INIPA Exp . ENDPA Se
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
    51    | Exp . MINMIN Exp
@@ -1365,38 +1328,82 @@ Estado 92
     MULTI        desplazar e ir al estado 84
 
 
+Estado 92
+
+   35 Se: FOR ID ASIGN . Exp ITEFOR Exp DO Se
+
+    error     desplazar e ir al estado 47
+    UNARI     desplazar e ir al estado 23
+    ADDITION  desplazar e ir al estado 24
+    ID        desplazar e ir al estado 48
+    INIPA     desplazar e ir al estado 28
+    CONSTANT  desplazar e ir al estado 36
+    INISQR    desplazar e ir al estado 37
+
+    Exp  ir al estado 119
+
+
 Estado 93
+
+   34 Se: WHILE INIPA Exp . ENDPA Se
+   49 Exp: Exp . ADDITION Exp
+   50    | Exp . ATSIGN Exp
+   51    | Exp . MINMIN Exp
+   52    | Exp . COMPAR Exp
+   53    | Exp . EQUALS Exp
+   54    | Exp . ORLOG Exp
+   55    | Exp . ANDLOG Exp
+   56    | Exp . EXOR Exp
+   57    | Exp . MULTI Exp
+   58    | Exp . CONCATENATE Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
+
+    ADDITION     desplazar e ir al estado 74
+    MINMIN       desplazar e ir al estado 75
+    PLUSPLUS     desplazar e ir al estado 76
+    ATSIGN       desplazar e ir al estado 77
+    ENDPA        desplazar e ir al estado 120
+    CONCATENATE  desplazar e ir al estado 78
+    ORLOG        desplazar e ir al estado 79
+    ANDLOG       desplazar e ir al estado 80
+    EXOR         desplazar e ir al estado 81
+    EQUALS       desplazar e ir al estado 82
+    COMPAR       desplazar e ir al estado 83
+    MULTI        desplazar e ir al estado 84
+
+
+Estado 94
 
    41 Lvread: WORD COMMA . Lv2
 
     error  desplazar e ir al estado 59
     ID     desplazar e ir al estado 60
 
-    Lv2  ir al estado 119
+    Lv2  ir al estado 121
 
 
-Estado 94
+Estado 95
 
    36 Se: READ Lvread SEMICOLON .
 
     $default  reduce usando la regla 36 (Se)
 
 
-Estado 95
+Estado 96
 
    43 Lv2: Lv2 COMMA . ID
 
-    ID  desplazar e ir al estado 120
+    ID  desplazar e ir al estado 122
 
 
-Estado 96
+Estado 97
 
    37 Se: PRINT Lec SEMICOLON .
 
     $default  reduce usando la regla 37 (Se)
 
 
-Estado 97
+Estado 98
 
    67 Lec: Lec COMMA . Exp
    68    | Lec COMMA . WORD
@@ -1407,54 +1414,54 @@ Estado 97
     ID        desplazar e ir al estado 48
     INIPA     desplazar e ir al estado 28
     CONSTANT  desplazar e ir al estado 36
-    WORD      desplazar e ir al estado 121
+    WORD      desplazar e ir al estado 123
     INISQR    desplazar e ir al estado 37
 
-    Exp  ir al estado 122
+    Exp  ir al estado 124
 
 
-Estado 98
+Estado 99
 
    38 Se: RETURN Exp SEMICOLON .
 
     $default  reduce usando la regla 38 (Se)
 
 
-Estado 99
+Estado 100
 
    65 lc: lc COMMA . CONSTANT
 
-    CONSTANT  desplazar e ir al estado 123
+    CONSTANT  desplazar e ir al estado 125
 
 
-Estado 100
+Estado 101
 
    63 Exp: INISQR lc ENDSQR .
 
     $default  reduce usando la regla 63 (Exp)
 
 
-Estado 101
+Estado 102
 
    18 Ds: Cs $@2 B .
 
     $default  reduce usando la regla 18 (Ds)
 
 
-Estado 102
+Estado 103
 
    19 Cs: Dc2 ID INIPA . Pa ENDPA
    20   | Dc2 ID INIPA . ENDPA
 
-    TYPEVAR  desplazar e ir al estado 124
-    ENDPA    desplazar e ir al estado 125
-    LIST     desplazar e ir al estado 126
+    TYPEVAR  desplazar e ir al estado 126
+    ENDPA    desplazar e ir al estado 127
+    LIST     desplazar e ir al estado 128
 
-    Dc  ir al estado 127
-    Pa  ir al estado 128
+    Dc  ir al estado 129
+    Pa  ir al estado 130
 
 
-Estado 103
+Estado 104
 
    49 Exp: Exp . ADDITION Exp
    49    | Exp ADDITION Exp .
@@ -1474,7 +1481,7 @@ Estado 103
     $default  reduce usando la regla 49 (Exp)
 
 
-Estado 104
+Estado 105
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1500,7 +1507,7 @@ Estado 104
     $default  reduce usando la regla 51 (Exp)
 
 
-Estado 105
+Estado 106
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1518,7 +1525,7 @@ Estado 105
     ADDITION     desplazar e ir al estado 74
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
-    ATSIGN       desplazar e ir al estado 129
+    ATSIGN       desplazar e ir al estado 131
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -1528,7 +1535,7 @@ Estado 105
     MULTI        desplazar e ir al estado 84
 
 
-Estado 106
+Estado 107
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1558,7 +1565,7 @@ Estado 106
     $default  reduce usando la regla 50 (Exp)
 
 
-Estado 107
+Estado 108
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1585,7 +1592,7 @@ Estado 107
     $default  reduce usando la regla 58 (Exp)
 
 
-Estado 108
+Estado 109
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1610,7 +1617,7 @@ Estado 108
     $default  reduce usando la regla 54 (Exp)
 
 
-Estado 109
+Estado 110
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1634,7 +1641,7 @@ Estado 109
     $default  reduce usando la regla 55 (Exp)
 
 
-Estado 110
+Estado 111
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1657,7 +1664,7 @@ Estado 110
     $default  reduce usando la regla 56 (Exp)
 
 
-Estado 111
+Estado 112
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1679,7 +1686,7 @@ Estado 111
     $default  reduce usando la regla 53 (Exp)
 
 
-Estado 112
+Estado 113
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1700,7 +1707,7 @@ Estado 112
     $default  reduce usando la regla 52 (Exp)
 
 
-Estado 113
+Estado 114
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1718,78 +1725,31 @@ Estado 113
     $default  reduce usando la regla 57 (Exp)
 
 
-Estado 114
+Estado 115
+
+   39 Se: Exp LISTOP1 SEMICOLON .
+
+    $default  reduce usando la regla 39 (Se)
+
+
+Estado 116
 
    60 Exp: ID INIPA Lec ENDPA .
 
     $default  reduce usando la regla 60 (Exp)
 
 
-Estado 115
+Estado 117
 
    31 Se: ID ASIGN Exp SEMICOLON .
 
     $default  reduce usando la regla 31 (Se)
 
 
-Estado 116
+Estado 118
 
    32 Se: IF INIPA Exp ENDPA . Se
    33   | IF INIPA Exp ENDPA . Se ELSE Se
-
-    error     desplazar e ir al estado 47
-    UNARI     desplazar e ir al estado 23
-    ADDITION  desplazar e ir al estado 24
-    LISTOP2   desplazar e ir al estado 25
-    INIBLO    desplazar e ir al estado 3
-    ID        desplazar e ir al estado 27
-    INIPA     desplazar e ir al estado 28
-    IF        desplazar e ir al estado 30
-    FOR       desplazar e ir al estado 31
-    WHILE     desplazar e ir al estado 32
-    READ      desplazar e ir al estado 33
-    PRINT     desplazar e ir al estado 34
-    RETURN    desplazar e ir al estado 35
-    CONSTANT  desplazar e ir al estado 36
-    INISQR    desplazar e ir al estado 37
-
-    B    ir al estado 38
-    Se   ir al estado 130
-    Exp  ir al estado 44
-
-
-Estado 117
-
-   35 Se: FOR ID ASIGN Exp . ITEFOR Exp DO Se
-   49 Exp: Exp . ADDITION Exp
-   50    | Exp . ATSIGN Exp
-   51    | Exp . MINMIN Exp
-   52    | Exp . COMPAR Exp
-   53    | Exp . EQUALS Exp
-   54    | Exp . ORLOG Exp
-   55    | Exp . ANDLOG Exp
-   56    | Exp . EXOR Exp
-   57    | Exp . MULTI Exp
-   58    | Exp . CONCATENATE Exp
-   59    | Exp . PLUSPLUS Exp ATSIGN Exp
-
-    ADDITION     desplazar e ir al estado 74
-    MINMIN       desplazar e ir al estado 75
-    PLUSPLUS     desplazar e ir al estado 76
-    ATSIGN       desplazar e ir al estado 77
-    ITEFOR       desplazar e ir al estado 131
-    CONCATENATE  desplazar e ir al estado 78
-    ORLOG        desplazar e ir al estado 79
-    ANDLOG       desplazar e ir al estado 80
-    EXOR         desplazar e ir al estado 81
-    EQUALS       desplazar e ir al estado 82
-    COMPAR       desplazar e ir al estado 83
-    MULTI        desplazar e ir al estado 84
-
-
-Estado 118
-
-   34 Se: WHILE INIPA Exp ENDPA . Se
 
     error     desplazar e ir al estado 47
     UNARI     desplazar e ir al estado 23
@@ -1814,29 +1774,83 @@ Estado 118
 
 Estado 119
 
+   35 Se: FOR ID ASIGN Exp . ITEFOR Exp DO Se
+   49 Exp: Exp . ADDITION Exp
+   50    | Exp . ATSIGN Exp
+   51    | Exp . MINMIN Exp
+   52    | Exp . COMPAR Exp
+   53    | Exp . EQUALS Exp
+   54    | Exp . ORLOG Exp
+   55    | Exp . ANDLOG Exp
+   56    | Exp . EXOR Exp
+   57    | Exp . MULTI Exp
+   58    | Exp . CONCATENATE Exp
+   59    | Exp . PLUSPLUS Exp ATSIGN Exp
+
+    ADDITION     desplazar e ir al estado 74
+    MINMIN       desplazar e ir al estado 75
+    PLUSPLUS     desplazar e ir al estado 76
+    ATSIGN       desplazar e ir al estado 77
+    ITEFOR       desplazar e ir al estado 133
+    CONCATENATE  desplazar e ir al estado 78
+    ORLOG        desplazar e ir al estado 79
+    ANDLOG       desplazar e ir al estado 80
+    EXOR         desplazar e ir al estado 81
+    EQUALS       desplazar e ir al estado 82
+    COMPAR       desplazar e ir al estado 83
+    MULTI        desplazar e ir al estado 84
+
+
+Estado 120
+
+   34 Se: WHILE INIPA Exp ENDPA . Se
+
+    error     desplazar e ir al estado 47
+    UNARI     desplazar e ir al estado 23
+    ADDITION  desplazar e ir al estado 24
+    LISTOP2   desplazar e ir al estado 25
+    INIBLO    desplazar e ir al estado 3
+    ID        desplazar e ir al estado 27
+    INIPA     desplazar e ir al estado 28
+    IF        desplazar e ir al estado 30
+    FOR       desplazar e ir al estado 31
+    WHILE     desplazar e ir al estado 32
+    READ      desplazar e ir al estado 33
+    PRINT     desplazar e ir al estado 34
+    RETURN    desplazar e ir al estado 35
+    CONSTANT  desplazar e ir al estado 36
+    INISQR    desplazar e ir al estado 37
+
+    B    ir al estado 38
+    Se   ir al estado 134
+    Exp  ir al estado 44
+
+
+Estado 121
+
    41 Lvread: WORD COMMA Lv2 .
    43 Lv2: Lv2 . COMMA ID
 
-    COMMA  desplazar e ir al estado 95
+    COMMA  desplazar e ir al estado 96
 
     $default  reduce usando la regla 41 (Lvread)
 
 
-Estado 120
+Estado 122
 
    43 Lv2: Lv2 COMMA ID .
 
     $default  reduce usando la regla 43 (Lv2)
 
 
-Estado 121
+Estado 123
 
    68 Lec: Lec COMMA WORD .
 
     $default  reduce usando la regla 68 (Lec)
 
 
-Estado 122
+Estado 124
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -1866,80 +1880,54 @@ Estado 122
     $default  reduce usando la regla 67 (Lec)
 
 
-Estado 123
+Estado 125
 
    65 lc: lc COMMA CONSTANT .
 
     $default  reduce usando la regla 65 (lc)
 
 
-Estado 124
+Estado 126
 
    23 Dc: TYPEVAR .
 
     $default  reduce usando la regla 23 (Dc)
 
 
-Estado 125
+Estado 127
 
    20 Cs: Dc2 ID INIPA ENDPA .
 
     $default  reduce usando la regla 20 (Cs)
 
 
-Estado 126
+Estado 128
 
    22 Dc: LIST . TYPEVAR
 
-    TYPEVAR  desplazar e ir al estado 133
-
-
-Estado 127
-
-   27 Pa: Dc . ID
-
-    ID  desplazar e ir al estado 134
-
-
-Estado 128
-
-   19 Cs: Dc2 ID INIPA Pa . ENDPA
-   26 Pa: Pa . COMMA Dc ID
-
-    COMMA  desplazar e ir al estado 135
-    ENDPA  desplazar e ir al estado 136
+    TYPEVAR  desplazar e ir al estado 135
 
 
 Estado 129
 
-   50 Exp: Exp ATSIGN . Exp
-   59    | Exp PLUSPLUS Exp ATSIGN . Exp
+   27 Pa: Dc . ID
 
-    error     desplazar e ir al estado 47
-    UNARI     desplazar e ir al estado 23
-    ADDITION  desplazar e ir al estado 24
-    ID        desplazar e ir al estado 48
-    INIPA     desplazar e ir al estado 28
-    CONSTANT  desplazar e ir al estado 36
-    INISQR    desplazar e ir al estado 37
-
-    Exp  ir al estado 137
+    ID  desplazar e ir al estado 136
 
 
 Estado 130
 
-   32 Se: IF INIPA Exp ENDPA Se .
-   33   | IF INIPA Exp ENDPA Se . ELSE Se
+   19 Cs: Dc2 ID INIPA Pa . ENDPA
+   26 Pa: Pa . COMMA Dc ID
 
-    ELSE  desplazar e ir al estado 138
-
-    ELSE      [reduce usando la regla 32 (Se)]
-    $default  reduce usando la regla 32 (Se)
+    COMMA  desplazar e ir al estado 137
+    ENDPA  desplazar e ir al estado 138
 
 
 Estado 131
 
-   35 Se: FOR ID ASIGN Exp ITEFOR . Exp DO Se
+   50 Exp: Exp ATSIGN . Exp
+   59    | Exp PLUSPLUS Exp ATSIGN . Exp
 
     error     desplazar e ir al estado 47
     UNARI     desplazar e ir al estado 23
@@ -1954,43 +1942,69 @@ Estado 131
 
 Estado 132
 
+   32 Se: IF INIPA Exp ENDPA Se .
+   33   | IF INIPA Exp ENDPA Se . ELSE Se
+
+    ELSE  desplazar e ir al estado 140
+
+    ELSE      [reduce usando la regla 32 (Se)]
+    $default  reduce usando la regla 32 (Se)
+
+
+Estado 133
+
+   35 Se: FOR ID ASIGN Exp ITEFOR . Exp DO Se
+
+    error     desplazar e ir al estado 47
+    UNARI     desplazar e ir al estado 23
+    ADDITION  desplazar e ir al estado 24
+    ID        desplazar e ir al estado 48
+    INIPA     desplazar e ir al estado 28
+    CONSTANT  desplazar e ir al estado 36
+    INISQR    desplazar e ir al estado 37
+
+    Exp  ir al estado 141
+
+
+Estado 134
+
    34 Se: WHILE INIPA Exp ENDPA Se .
 
     $default  reduce usando la regla 34 (Se)
 
 
-Estado 133
+Estado 135
 
    22 Dc: LIST TYPEVAR .
 
     $default  reduce usando la regla 22 (Dc)
 
 
-Estado 134
+Estado 136
 
    27 Pa: Dc ID .
 
     $default  reduce usando la regla 27 (Pa)
 
 
-Estado 135
+Estado 137
 
    26 Pa: Pa COMMA . Dc ID
 
-    TYPEVAR  desplazar e ir al estado 124
-    LIST     desplazar e ir al estado 126
+    TYPEVAR  desplazar e ir al estado 126
+    LIST     desplazar e ir al estado 128
 
-    Dc  ir al estado 140
+    Dc  ir al estado 142
 
 
-Estado 136
+Estado 138
 
    19 Cs: Dc2 ID INIPA Pa ENDPA .
 
     $default  reduce usando la regla 19 (Cs)
 
 
-Estado 137
+Estado 139
 
    49 Exp: Exp . ADDITION Exp
    50    | Exp . ATSIGN Exp
@@ -2021,7 +2035,7 @@ Estado 137
     $default  reduce usando la regla 59 (Exp)
 
 
-Estado 138
+Estado 140
 
    33 Se: IF INIPA Exp ENDPA Se ELSE . Se
 
@@ -2042,11 +2056,11 @@ Estado 138
     INISQR    desplazar e ir al estado 37
 
     B    ir al estado 38
-    Se   ir al estado 141
+    Se   ir al estado 143
     Exp  ir al estado 44
 
 
-Estado 139
+Estado 141
 
    35 Se: FOR ID ASIGN Exp ITEFOR Exp . DO Se
    49 Exp: Exp . ADDITION Exp
@@ -2065,7 +2079,7 @@ Estado 139
     MINMIN       desplazar e ir al estado 75
     PLUSPLUS     desplazar e ir al estado 76
     ATSIGN       desplazar e ir al estado 77
-    DO           desplazar e ir al estado 142
+    DO           desplazar e ir al estado 144
     CONCATENATE  desplazar e ir al estado 78
     ORLOG        desplazar e ir al estado 79
     ANDLOG       desplazar e ir al estado 80
@@ -2075,21 +2089,21 @@ Estado 139
     MULTI        desplazar e ir al estado 84
 
 
-Estado 140
+Estado 142
 
    26 Pa: Pa COMMA Dc . ID
 
-    ID  desplazar e ir al estado 143
+    ID  desplazar e ir al estado 145
 
 
-Estado 141
+Estado 143
 
    33 Se: IF INIPA Exp ENDPA Se ELSE Se .
 
     $default  reduce usando la regla 33 (Se)
 
 
-Estado 142
+Estado 144
 
    35 Se: FOR ID ASIGN Exp ITEFOR Exp DO . Se
 
@@ -2110,18 +2124,18 @@ Estado 142
     INISQR    desplazar e ir al estado 37
 
     B    ir al estado 38
-    Se   ir al estado 144
+    Se   ir al estado 146
     Exp  ir al estado 44
 
 
-Estado 143
+Estado 145
 
    26 Pa: Pa COMMA Dc ID .
 
     $default  reduce usando la regla 26 (Pa)
 
 
-Estado 144
+Estado 146
 
    35 Se: FOR ID ASIGN Exp ITEFOR Exp DO Se .
 

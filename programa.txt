@@ -12,7 +12,7 @@ main{
 
     int funcionA (int a1, double a2, char a3){
         begin_local_var
-            int x1, x2 ;
+            int x1, x2;
         end_local_var
         char funcionB (char b1, bool b2){
             begin_local_var
@@ -34,16 +34,16 @@ main{
             }
 
             xf= funcionC (true, 10);
-            x2= xf*(funcionC(false,1)-funcionC(true,23))/10.0;
-            while (x2*funcionC(false,1)-xf<10.0){
+            x2= xf*(funcionC( true , 1 ) - funcionC( true , 23 ))/10.0;
+            while ( x2 * funcionC( false , 1 ) - xf<10.0 ){
                 x2= x2*xf ;
             }
 
             for h1 = 1 to 10 do {
                 h1 = h1 ;
             }
-            
-            xf = 5.0;
+
+            return 'a';
         }
         double funcionD (double d1){
             begin_local_var
@@ -79,6 +79,13 @@ main{
         }
 
         pe = pe ++ 10 @ 1 ;
+        ve = #pe;
+        ve = ?pe;
+        pe = pe % 3;
+        pe = pe ** pe;
+        $ pe;
+        pe >>;
+        pe <<;
 
         if ( (pe@2) == 20){
             ve = pe -- 1 ;
@@ -88,6 +95,7 @@ main{
             pe = pe2 -10;
         }
 
+        return 1;
     }
 
     return 1;

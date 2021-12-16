@@ -749,7 +749,7 @@ bool comprobarMulti (atributos atr1, atributos atr2, int atr_multi){
         lista_retorno = atr1.lista != atr2.lista;
     }
     else if (atr_multi == 14){
-        if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero && atr1.tipo != real) ||
+        if ( (atr1.tipo != atr2.tipo) || (atr1.tipo != entero) ||
             (atr2.lista == true) ){
                 printErrorOperador(atr1, atr2, "Modulo");
         }
